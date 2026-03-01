@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Register - FitAI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "deep-charcoal": "#121212",
+                        "sunset-orange": "#FF4D00",
+                        "surface-variant": "#1E1E1E",
+                        "border-muted": "#333333"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #FF4D00;
+        }.m3-field-container {
+            @apply relative w-full border-b border-white/20 bg-transparent transition-all duration-200;
+        }
+        .m3-field-container:focus-within {
+            @apply border-white;
+        }
+        .m3-input {
+            @apply w-full bg-transparent pt-6 pb-2 px-0 border-none focus:ring-0 text-white placeholder:text-transparent;
+        }
+        .m3-label {
+            @apply absolute left-0 top-6 text-white/60 text-base transition-all duration-200 pointer-events-none;
+        }
+        .m3-input:focus ~ .m3-label,
+        .m3-input:not(:placeholder-shown) ~ .m3-label {
+            @apply -translate-y-6 text-sm text-white/90;
+        }
+    </style>
+<style>
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-deep-charcoal font-display text-white antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="flex items-center px-4 py-4">
+<button class="text-white flex size-12 items-center justify-center rounded-full active:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+</div>
+<div class="flex flex-col px-8 pt-2 pb-10">
+<h1 class="text-white tracking-tight text-[32px] font-bold leading-tight pb-2">
+                Create Account
+            </h1>
+<p class="text-white/60 text-base font-normal leading-relaxed max-w-[280px]">
+                Join our community and start your fitness evolution today.
+            </p>
+</div>
+<div class="flex flex-col gap-10 px-8 pb-12 flex-1">
+<div class="m3-field-container">
+<input class="m3-input" id="name" placeholder="Full Name" type="text"/>
+<label class="m3-label" for="name">Full Name</label>
+</div>
+<div class="m3-field-container">
+<input class="m3-input" id="email" placeholder="Email Address" type="email"/>
+<label class="m3-label" for="email">Email Address</label>
+</div>
+<div class="m3-field-container">
+<input class="m3-input" id="password" placeholder="Password" type="password"/>
+<label class="m3-label" for="password">Create Password</label>
+<button class="absolute right-0 top-6 text-white/40">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+<div class="flex items-start gap-4 pt-4">
+<div class="relative flex items-center pt-0.5">
+<input class="h-5 w-5 rounded-sm bg-transparent border-white/40 text-sunset-orange focus:ring-sunset-orange focus:ring-offset-deep-charcoal" id="terms" type="checkbox"/>
+</div>
+<label class="text-sm text-white/60 leading-snug" for="terms">
+                    By registering, you agree to our <a class="text-white underline underline-offset-4 font-medium" href="#">Terms</a> and <a class="text-white underline underline-offset-4 font-medium" href="#">Privacy Policy</a>.
+                </label>
+</div>
+</div>
+<div class="p-8 pb-12">
+<button class="w-full h-14 bg-sunset-orange text-white font-bold text-lg rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-all shadow-lg shadow-sunset-orange/20">
+                Register
+            </button>
+<p class="mt-8 text-center text-white/40 font-medium">
+                Already have an account? 
+                <a class="text-white font-bold hover:underline underline-offset-4 ml-1" href="#">Log in</a>
+</p>
+</div>
+</div>
+
+</body></html>

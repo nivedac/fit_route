@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Android Food Selection Refined Dark</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "accent": "#00E676",
+                        "charcoal": "#121212",
+                        "surface": "#1E1E1E",
+                        "surface-variant": "#2C2C2C",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --accent-color: #00E676;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .m3-search-bar {
+            @apply flex items-center bg-surface-variant rounded-full px-4 h-14 w-full text-white transition-all focus-within:ring-1 focus-within:ring-accent/50;
+        }
+        input[type="checkbox"]:checked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-charcoal text-white font-sans dark">
+<div class="relative flex h-screen max-w-[430px] mx-auto flex-col bg-charcoal overflow-hidden shadow-2xl">
+<div class="flex items-center p-4 justify-between sticky top-0 z-20 bg-charcoal/90 backdrop-blur-lg">
+<button class="text-white flex size-10 items-center justify-center rounded-full active:bg-white/10">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-white text-lg font-semibold flex-1 px-4">Available Foods</h1>
+<button class="text-white flex size-10 items-center justify-center rounded-full active:bg-white/10">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="px-4 mb-4">
+<div class="m3-search-bar">
+<span class="material-symbols-outlined text-gray-400 mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-base placeholder-gray-500 text-white" placeholder="Search ingredients..." type="text"/>
+<span class="material-symbols-outlined text-gray-400 ml-3">mic</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar px-4 pb-48">
+<div class="mt-4">
+<h3 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4 px-2">Carbohydrates</h3>
+<div class="space-y-3">
+<label class="flex items-center p-4 bg-surface rounded-2xl border border-white/5 cursor-pointer active:scale-[0.98] transition-all">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white/70">grass</span>
+</div>
+<span class="flex-1 text-base font-medium">Basmati Rice</span>
+<input checked="" class="h-6 w-6 rounded border-white/20 bg-transparent text-accent focus:ring-accent focus:ring-offset-charcoal transition-colors" type="checkbox"/>
+</label>
+<label class="flex items-center p-4 bg-surface rounded-2xl border border-white/5 cursor-pointer active:scale-[0.98] transition-all">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white/70">bakery_dining</span>
+</div>
+<span class="flex-1 text-base font-medium">Rolled Oats</span>
+<input class="h-6 w-6 rounded border-white/20 bg-transparent text-accent focus:ring-accent focus:ring-offset-charcoal transition-colors" type="checkbox"/>
+</label>
+</div>
+</div>
+<div class="mt-8">
+<h3 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4 px-2">Proteins</h3>
+<div class="space-y-3">
+<label class="flex items-center p-4 bg-surface rounded-2xl border border-white/5 cursor-pointer active:scale-[0.98] transition-all">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white/70">egg</span>
+</div>
+<span class="flex-1 text-base font-medium">Free Range Eggs</span>
+<input checked="" class="h-6 w-6 rounded border-white/20 bg-transparent text-accent focus:ring-accent focus:ring-offset-charcoal transition-colors" type="checkbox"/>
+</label>
+<label class="flex items-center p-4 bg-surface rounded-2xl border border-white/5 cursor-pointer active:scale-[0.98] transition-all">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white/70">kebab_dining</span>
+</div>
+<span class="flex-1 text-base font-medium">Chicken Breast</span>
+<input checked="" class="h-6 w-6 rounded border-white/20 bg-transparent text-accent focus:ring-accent focus:ring-offset-charcoal transition-colors" type="checkbox"/>
+</label>
+</div>
+</div>
+<div class="mt-8">
+<h3 class="text-gray-400 text-xs font-bold uppercase tracking-widest mb-4 px-2">Greens &amp; Fruit</h3>
+<div class="space-y-3">
+<label class="flex items-center p-4 bg-surface rounded-2xl border border-white/5 cursor-pointer active:scale-[0.98] transition-all">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white/70">eco</span>
+</div>
+<span class="flex-1 text-base font-medium">Broccoli &amp; Spinach</span>
+<input class="h-6 w-6 rounded border-white/20 bg-transparent text-accent focus:ring-accent focus:ring-offset-charcoal transition-colors" type="checkbox"/>
+</label>
+<label class="flex items-center p-4 bg-surface rounded-2xl border border-white/5 cursor-pointer active:scale-[0.98] transition-all">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white/70">nutrition</span>
+</div>
+<span class="flex-1 text-base font-medium">Mixed Berries</span>
+<input checked="" class="h-6 w-6 rounded border-white/20 bg-transparent text-accent focus:ring-accent focus:ring-offset-charcoal transition-colors" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<div class="absolute bottom-[80px] left-0 right-0 p-4 bg-gradient-to-t from-charcoal via-charcoal/90 to-transparent">
+<button class="w-full bg-accent text-charcoal font-bold py-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 active:scale-[0.97] transition-all">
+<span class="material-symbols-outlined font-bold">bolt</span>
+                GENERATE PLAN
+            </button>
+</div>
+<div class="flex items-center justify-around bg-surface border-t border-white/5 pt-3 pb-8 px-2 z-30">
+<a class="flex flex-col items-center gap-1 text-gray-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[11px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-accent" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">description</span>
+<span class="text-[11px] font-medium">Plans</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-500" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[11px] font-medium">Activity</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[11px] font-medium">Profile</span>
+</a>
+</div>
+</div>
+
+</body></html>

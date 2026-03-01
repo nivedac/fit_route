@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fitness AI - Login Refined</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "charcoal-black": "#0A0A0B",
+                        "deep-surface": "#121214",
+                        "sunset-orange": "#FF5F1F",
+                        "sunset-glow": "rgba(255, 95, 31, 0.3)",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "2xl": "16px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --sunset-orange: #FF5F1F;
+        }
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #0A0A0B;
+        }
+        .m3-field:focus-within {
+            border-color: var(--sunset-orange);
+            box-shadow: 0 0 0 1px var(--sunset-orange);
+        }
+        .m3-field:focus-within label {
+            color: var(--sunset-orange);
+        }
+        .sunset-glow-effect {
+            box-shadow: 0 8px 24px -6px rgba(255, 95, 31, 0.4);
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-slate-100 min-h-screen flex flex-col items-center justify-center">
+<div class="relative flex h-full min-h-screen w-full flex-col bg-charcoal-black overflow-x-hidden max-w-[430px] mx-auto shadow-2xl">
+<div class="absolute top-[-5%] right-[-10%] w-72 h-72 bg-sunset-orange/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-[5%] left-[-10%] w-64 h-64 bg-sunset-orange/5 rounded-full blur-[80px] pointer-events-none"></div>
+<div class="flex items-center p-6 pb-2 justify-between z-10">
+<div class="text-slate-100 flex size-10 shrink-0 items-center cursor-pointer hover:bg-white/5 rounded-full transition-colors justify-center">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+</div>
+<div class="px-8 pt-8 pb-4 z-10">
+<div class="w-14 h-14 bg-sunset-orange/10 rounded-2xl flex items-center justify-center mb-10 border border-sunset-orange/20">
+<span class="material-symbols-outlined text-sunset-orange text-3xl font-bold">bolt</span>
+</div>
+<h1 class="text-white tracking-tight text-4xl font-semibold leading-tight text-left">
+                Refine your<br/><span class="text-sunset-orange">potential.</span>
+</h1>
+<p class="text-slate-500 mt-4 text-base font-light max-w-[280px]">
+                Enter your credentials to access your performance dashboard.
+            </p>
+</div>
+<div class="flex flex-col gap-1 px-6 py-2 mt-6 z-10">
+<div class="flex flex-col px-2 py-3">
+<div class="m3-field relative flex w-full flex-1 items-stretch rounded-lg border border-slate-700 bg-transparent transition-all duration-200">
+<div class="flex items-center justify-center pl-4 text-slate-500">
+<span class="material-symbols-outlined text-xl">mail</span>
+</div>
+<div class="flex flex-col flex-1">
+<label class="text-[10px] font-medium text-slate-500 uppercase tracking-widest pt-2 pl-4">Email Address</label>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent h-10 text-white focus:ring-0 placeholder:text-slate-700 p-4 pt-0 text-base" placeholder="name@email.com" type="email"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col px-2 py-3">
+<div class="m3-field relative flex w-full flex-1 items-stretch rounded-lg border border-slate-700 bg-transparent transition-all duration-200">
+<div class="flex items-center justify-center pl-4 text-slate-500">
+<span class="material-symbols-outlined text-xl">lock</span>
+</div>
+<div class="flex flex-col flex-1">
+<label class="text-[10px] font-medium text-slate-500 uppercase tracking-widest pt-2 pl-4">Password</label>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent h-10 text-white focus:ring-0 placeholder:text-slate-700 p-4 pt-0 text-base" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex items-center justify-center pr-4 text-slate-500 cursor-pointer">
+<span class="material-symbols-outlined text-xl">visibility_off</span>
+</div>
+</div>
+<div class="flex justify-end mt-2">
+<a class="text-sunset-orange/80 text-xs font-medium hover:text-sunset-orange transition-colors" href="#">Forgot password?</a>
+</div>
+</div>
+</div>
+<div class="flex px-8 py-8 flex-col gap-6 z-10">
+<button class="bg-sunset-orange sunset-glow-effect flex min-w-[84px] cursor-pointer items-center justify-center rounded-xl h-14 px-5 flex-1 text-white text-base font-bold leading-normal tracking-wide active:scale-[0.98] transition-all">
+<span class="truncate">Login</span>
+</button>
+<div class="flex items-center gap-4 my-2">
+<div class="h-[1px] bg-slate-800 flex-1"></div>
+<span class="text-slate-600 text-[10px] font-semibold uppercase tracking-[0.2em]">or continue with</span>
+<div class="h-[1px] bg-slate-800 flex-1"></div>
+</div>
+<button class="flex items-center justify-center h-14 border border-slate-800 rounded-xl bg-deep-surface hover:bg-slate-800/50 transition-colors gap-3">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIu1RHtYFgyJPNDfD1FIRDaidaJm3Kh831nV8GX3sNETU5Dgn-KNKJH3FA323KOwKVPU_APPkoxuGOnE9x1vXJ2W80fKtNhgsW_lP7yv8FoGrepGBNTn4TM3PVQ_9gWkR9Eajgngnl2it1v6jyKkwIBl936b7GBSMnFslLagVrtAoj0IJF3crhcCPSGq-N1YEQtDB-AySaX8Y8izDH_CaLQv8TBwI2XyGiSywsnAgbi1MJTXgu9RxEMVhieKB0ynerxS4Qmibdig"/>
+<span class="text-slate-200 font-medium text-sm">Google Account</span>
+</button>
+</div>
+<div class="mt-auto pb-10 flex flex-col items-center z-10">
+<p class="text-slate-500 text-sm">
+                Don't have an account? 
+                <a class="text-sunset-orange font-bold ml-1 hover:underline underline-offset-4" href="#">Sign Up</a>
+</p>
+</div>
+</div>
+
+</body></html>

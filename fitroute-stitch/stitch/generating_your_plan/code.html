@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Fitness Planner - Loading Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "sunset-orange": "#FF4D00",
+                        "deep-charcoal": "#0F0F0F",
+                        "surface-variant": "#1A1A1A",
+                    },
+                    fontFamily: {
+                        "sans": ["Lexend", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @keyframes spinner-rotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-loading {
+            animation: spinner-rotation 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        .glow-orange {
+            box-shadow: 0 0 20px rgba(255, 77, 0, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-deep-charcoal font-sans text-white min-h-screen flex flex-col overflow-hidden">
+<header class="flex items-center px-4 h-16 shrink-0 z-20">
+<button class="text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-8 relative">
+<div class="relative flex items-center justify-center mb-16">
+<div class="w-48 h-48 rounded-full border-4 border-white/5"></div>
+<div class="absolute w-48 h-48 rounded-full border-4 border-transparent border-t-sunset-orange animate-loading glow-orange"></div>
+<div class="absolute flex flex-col items-center">
+<span class="text-4xl font-light tracking-tight">82%</span>
+</div>
+</div>
+<div class="text-center space-y-4 max-w-xs">
+<h1 class="text-2xl font-medium tracking-tight">Personalizing your plan</h1>
+<p class="text-white/60 text-sm leading-relaxed font-light">
+                Optimizing your workout splits and nutritional targets for peak performance.
+            </p>
+</div>
+<div class="mt-12 w-full max-w-sm space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-surface-variant/50 border border-white/5">
+<span class="material-symbols-outlined text-sunset-orange text-xl">check_circle</span>
+<span class="text-sm font-light text-white/80">Biometric data analyzed</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-surface-variant/50 border border-white/5">
+<span class="material-symbols-outlined text-sunset-orange text-xl">check_circle</span>
+<span class="text-sm font-light text-white/80">Strength goals mapped</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-surface-variant/80 border border-white/10">
+<div class="size-5 border-2 border-white/20 border-t-sunset-orange rounded-full animate-loading"></div>
+<span class="text-sm font-medium text-white">Generating meal schedules</span>
+</div>
+</div>
+</main>
+<footer class="p-8 flex flex-col items-center gap-4">
+<div class="w-full bg-white/5 h-1 rounded-full overflow-hidden max-w-[200px]">
+<div class="h-full bg-sunset-orange w-[82%] transition-all duration-500"></div>
+</div>
+<div class="flex items-center gap-2 opacity-40">
+<span class="material-symbols-outlined text-xs">lock</span>
+<span class="text-[10px] uppercase tracking-widest font-medium">Encrypted Processing</span>
+</div>
+</footer>
+
+</body></html>

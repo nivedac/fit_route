@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Android Plan Result Refined Dark</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "sunset-orange": "#FF5F1F",
+                        "deep-charcoal": "#121212",
+                        "surface-variant": "#1E1E1E",
+                        "on-surface": "#E3E3E3",
+                        "on-surface-variant": "#C4C4C4",
+                    },
+                    fontFamily: {
+                        "sans": ["Lexend", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #FF5F1F;
+        }
+        .m3-card {
+            @apply bg-surface-variant rounded-[24px] border border-white/5 overflow-hidden transition-all active:scale-[0.99];
+        }
+        .m3-nav-indicator {
+            @apply absolute inset-x-0 top-1/2 -translate-y-1/2 mx-auto h-8 w-16 rounded-full bg-sunset-orange/20 -z-10;
+        }
+    </style>
+<style>
+        body {
+            min-height: 100dvh;
+            background-color: #121212;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-deep-charcoal font-sans text-on-surface antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="flex items-center bg-deep-charcoal/90 backdrop-blur-md p-4 sticky top-0 z-20">
+<div class="text-white flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-white text-xl font-medium leading-tight flex-1 ml-2">Plan Details</h2>
+<div class="flex gap-4">
+<span class="material-symbols-outlined">share</span>
+<span class="material-symbols-outlined">more_vert</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto pb-48">
+<div class="p-4 pt-2">
+<div class="m3-card p-6 bg-gradient-to-br from-surface-variant to-deep-charcoal">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-1">Daily Energy Target</p>
+<div class="flex items-baseline gap-1">
+<p class="text-sunset-orange text-5xl font-bold tracking-tight">2,450</p>
+<p class="text-on-surface-variant font-medium text-lg">kcal</p>
+</div>
+</div>
+<div class="bg-sunset-orange/10 p-3 rounded-2xl">
+<span class="material-symbols-outlined text-sunset-orange text-3xl">bolt</span>
+</div>
+</div>
+<div class="mt-8">
+<div class="flex justify-between text-xs text-on-surface-variant mb-2">
+<span class="font-medium">Macro Distribution</span>
+<span class="font-bold text-on-surface">Balanced</span>
+</div>
+<div class="flex h-2 w-full gap-1">
+<div class="h-full bg-sunset-orange w-[40%] rounded-l-full"></div>
+<div class="h-full bg-on-surface/40 w-[35%]"></div>
+<div class="h-full bg-on-surface/10 w-[25%] rounded-r-full"></div>
+</div>
+<div class="flex gap-4 mt-3">
+<div class="flex items-center gap-1.5">
+<div class="size-2 rounded-full bg-sunset-orange"></div>
+<span class="text-[10px] text-on-surface-variant font-medium uppercase">Prot 180g</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="size-2 rounded-full bg-on-surface/40"></div>
+<span class="text-[10px] text-on-surface-variant font-medium uppercase">Carb 220g</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 py-4">
+<div class="flex justify-between items-center mb-4 px-1">
+<h2 class="text-white text-lg font-semibold">Today's Sessions</h2>
+<span class="text-sunset-orange text-sm font-medium">View Schedule</span>
+</div>
+<div class="space-y-4">
+<div class="m3-card flex flex-col">
+<div class="flex gap-4 p-4">
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCh8lye9vOyL_fIhRCllo3mFqLQdufJ7djci-sysEZp-TzIFmNvBRCCnttvu1Rcy_e-OsZPat0stfG1y-5y-uKGcKk36CS5unJ2gBCJ98Kc9AUQ5pzrvic9dU-OUUXYlE2RW9Te_FNucuFwjgDYAoyIsJtdQYU1rQNhmpBD3mHLueKoWhmozzPtm76wX07_8jBHt-y63XEoKm-NJdewP28ajUSkghg_uim3nRPYWY4A7rmFC71076cpGyqKrx6DHvTEOQES3s3YZg");'></div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-white text-lg font-semibold leading-tight mb-1">Morning HIIT Blast</p>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">timer</span>
+<span>25 min</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">local_fire_department</span>
+<span>High Intensity</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 pb-4">
+<button class="w-full bg-sunset-orange text-white font-semibold py-3 rounded-full flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">play_arrow</span>
+                                Start Session
+                            </button>
+</div>
+</div>
+<div class="m3-card flex gap-4 p-4 items-center">
+<div class="w-16 h-16 bg-center bg-no-repeat bg-cover rounded-xl shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDksjYGM0bu2qcGx7ESQ_5fwsLtHgki1SJtxOpQuIs6CQydXW9KnivuWEO1iRZkf51rS97qugqiwxWcB23vBGdgr-2hXL1gp6iQZyNOHOj7YtjhbrAvoOkA2uaS0-TozEzpVL4Ku7NTrF3L90yUgMysgjG-J8cblLJQARSFn8OqVu6QnKFCvaQB7mwm7DL6QKPvmT9k_rFaaLLPq3uUTfq7QKuH204NK3ne3qghNpx_uEkoQafIJKxY9ZqfJdPhaArcB4xAjovmYg");'></div>
+<div class="flex-1">
+<p class="text-white font-semibold">Core &amp; Stability</p>
+<p class="text-on-surface-variant text-xs mt-0.5">15 min • Moderate</p>
+</div>
+<button class="size-10 rounded-full border border-white/10 flex items-center justify-center text-sunset-orange">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<div class="px-4 py-6">
+<h2 class="text-white text-lg font-semibold mb-4 px-1">Meal Plan</h2>
+<div class="space-y-3">
+<div class="m3-card p-3 flex items-center gap-4">
+<div class="size-16 rounded-xl bg-cover bg-center shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAucFhBV2Wq-Acr4IMS4YshWJcFJo3e7VgglUiESuguKC8Dg-Isg6OIhh9HM_0Gnw-FZvMOl19D4Y81SvsePqIsxB5RZCkuV9tN_Y2MaclqKHRxXaIQ1v5SnxNAyPtJjVQpjV8QfdWvh56QS64ArA49uXN5j0_UXopLZ3iIOQV99UamolIihFQmR2-L-vLOtDcN4XqwJ_PzGKhUPgzQAryPDfNLulrWir96dIow_LjW3Pfs5M3UKn6kCbdUtBWKM_Hd7p1oltw9iQ");'></div>
+<div class="flex-1">
+<p class="text-[10px] text-sunset-orange font-bold uppercase tracking-widest">Breakfast</p>
+<p class="text-white font-medium text-sm">Avocado Toast &amp; Poached Egg</p>
+<p class="text-on-surface-variant text-xs mt-0.5">420 kcal • 18g Prot</p>
+</div>
+<div class="p-2 text-on-surface-variant">
+<span class="material-symbols-outlined">add_circle</span>
+</div>
+</div>
+<div class="m3-card p-3 flex items-center gap-4">
+<div class="size-16 rounded-xl bg-cover bg-center shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4JbGUnKktSVc68CTOOY7gdfE06u1jpNO1PqCpi-M1XnnDxi1EwVIhpd6sJKwNzkBTtXTBlXvTryMzSl2Jhdf6p2_WoHuyhMw78P2NWiYdLCIHiMwRaadwsfzlMLlb2KuMrqlZw2Dg7rcDiEsmSP-gLETUK4fa3EHFB1KZuhVrKTu8BkgKdeNtV4R1OEDeUk1AttXm4SGiMtNBgfzigxLsVfe3bfLtKRJjELy7Zj4WO5uLjGXq9x5nX58poExoSlAp49PqR4q0mQ");'></div>
+<div class="flex-1">
+<p class="text-[10px] text-sunset-orange font-bold uppercase tracking-widest">Lunch</p>
+<p class="text-white font-medium text-sm">Grilled Salmon Quinoa Bowl</p>
+<p class="text-on-surface-variant text-xs mt-0.5">650 kcal • 42g Prot</p>
+</div>
+<div class="p-2 text-on-surface-variant">
+<span class="material-symbols-outlined">add_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 left-0 w-full bg-deep-charcoal/95 backdrop-blur-2xl border-t border-white/5 z-30">
+<div class="p-4">
+<button class="w-full bg-sunset-orange text-white font-bold py-4 rounded-2xl shadow-lg shadow-sunset-orange/20 active:scale-95 transition-all text-sm uppercase tracking-wide">
+                    Adopt This Plan
+                </button>
+</div>
+<div class="flex h-16 items-center justify-around px-2 pb-1">
+<a class="relative flex flex-1 flex-col items-center justify-center gap-0.5" href="#">
+<div class="m3-nav-indicator"></div>
+<span class="material-symbols-outlined text-white fill-1">dashboard</span>
+<p class="text-[10px] font-medium text-white">Today</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<p class="text-[10px] font-medium">Plans</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<p class="text-[10px] font-medium">Insights</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-0.5 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium">Profile</p>
+</a>
+</div>
+<div class="flex justify-center pb-2">
+<div class="w-32 h-1 bg-white/20 rounded-full"></div>
+</div>
+</div>
+</div>
+
+</body></html>

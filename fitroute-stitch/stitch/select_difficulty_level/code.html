@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Select Difficulty Level</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "charcoal": "#121212",
+                        "surface": "#1e1e1e",
+                        "surface-variant": "#2a2a2a"
+                    },
+                    fontFamily: {
+                        "sans": ["Lexend", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-charcoal text-slate-200 antialiased;
+            }
+        }
+        .m3-list-item:has(input:checked) {
+            @apply bg-surface-variant ring-1 ring-primary/30;
+        }
+        .m3-radio:checked {
+            background-color: #ccff00;
+            border-color: #ccff00;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23121212' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3.5'/%3e%3c/svg%3e");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen">
+<div class="relative flex h-full min-h-screen w-full max-w-[430px] mx-auto flex-col bg-charcoal overflow-x-hidden">
+<div class="flex items-center p-4 justify-between sticky top-0 bg-charcoal/95 backdrop-blur-md z-20">
+<button class="text-slate-200 flex size-12 items-center justify-center rounded-full hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-100 text-lg font-medium flex-1 text-center pr-12">Difficulty</h2>
+</div>
+<div class="px-6 py-4 flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Step 2 of 5</span>
+<span class="text-slate-500 text-xs font-medium">Profile Setup</span>
+</div>
+<div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 40%;"></div>
+</div>
+</div>
+<div class="px-6 pt-4 pb-6">
+<h1 class="text-white text-3xl font-semibold leading-tight tracking-tight">Set your baseline</h1>
+<p class="text-slate-400 text-sm font-normal mt-2">Choose the intensity that matches your current routine to optimize your AI coach.</p>
+</div>
+<div class="flex flex-col gap-2 px-4">
+<label class="m3-list-item flex items-center gap-4 rounded-2xl bg-surface p-5 cursor-pointer transition-all active:scale-[0.99] group">
+<div class="relative flex items-center justify-center">
+<input checked="" class="m3-radio h-5 w-5 border-2 border-slate-600 bg-transparent text-primary focus:ring-0 focus:ring-offset-0 transition-all" name="difficulty" type="radio" value="beginner"/>
+</div>
+<div class="flex grow flex-col">
+<div class="flex items-center justify-between">
+<span class="text-white text-base font-semibold">Beginner</span>
+<div class="flex gap-0.5">
+<div class="w-1 h-3 rounded-full bg-primary"></div>
+<div class="w-1 h-3 rounded-full bg-white/10"></div>
+<div class="w-1 h-3 rounded-full bg-white/10"></div>
+</div>
+</div>
+<span class="text-slate-400 text-sm leading-snug mt-1">Starting fresh or returning. Focus on fundamentals and form.</span>
+</div>
+</label>
+<label class="m3-list-item flex items-center gap-4 rounded-2xl bg-surface p-5 cursor-pointer transition-all active:scale-[0.99] group">
+<div class="relative flex items-center justify-center">
+<input class="m3-radio h-5 w-5 border-2 border-slate-600 bg-transparent text-primary focus:ring-0 focus:ring-offset-0 transition-all" name="difficulty" type="radio" value="intermediate"/>
+</div>
+<div class="flex grow flex-col">
+<div class="flex items-center justify-between">
+<span class="text-white text-base font-semibold">Intermediate</span>
+<div class="flex gap-0.5">
+<div class="w-1 h-3 rounded-full bg-primary"></div>
+<div class="w-1 h-3 rounded-full bg-primary"></div>
+<div class="w-1 h-3 rounded-full bg-white/10"></div>
+</div>
+</div>
+<span class="text-slate-400 text-sm leading-snug mt-1">Regular training (2-3 times/week). Ready for more variety.</span>
+</div>
+</label>
+<label class="m3-list-item flex items-center gap-4 rounded-2xl bg-surface p-5 cursor-pointer transition-all active:scale-[0.99] group">
+<div class="relative flex items-center justify-center">
+<input class="m3-radio h-5 w-5 border-2 border-slate-600 bg-transparent text-primary focus:ring-0 focus:ring-offset-0 transition-all" name="difficulty" type="radio" value="advanced"/>
+</div>
+<div class="flex grow flex-col">
+<div class="flex items-center justify-between">
+<span class="text-white text-base font-semibold">Advanced</span>
+<div class="flex gap-0.5">
+<div class="w-1 h-3 rounded-full bg-primary"></div>
+<div class="w-1 h-3 rounded-full bg-primary"></div>
+<div class="w-1 h-3 rounded-full bg-primary"></div>
+</div>
+</div>
+<span class="text-slate-400 text-sm leading-snug mt-1">Consistent high performance. Seeking maximum intensity.</span>
+</div>
+</label>
+</div>
+<div class="mt-auto p-6 flex flex-col gap-4">
+<button class="w-full bg-primary hover:bg-[#d9ff33] text-black font-bold py-4 rounded-full transition-all flex items-center justify-center gap-2 text-sm tracking-wide">
+                CONTINUE
+                <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+<button class="w-full text-slate-500 font-medium py-2 text-xs uppercase tracking-widest hover:text-white transition-colors">
+                Help me choose
+            </button>
+</div>
+<div class="fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-charcoal to-transparent pointer-events-none"></div>
+</div>
+
+</body></html>

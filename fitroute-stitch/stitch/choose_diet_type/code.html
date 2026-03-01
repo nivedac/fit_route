@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "accent-primary": "#FFFFFF",
+                        "accent-active": "#00FF9C",
+                        "deep-charcoal": "#121212",
+                        "card-stroke": "rgba(255, 255, 255, 0.15)",
+                        "card-stroke-active": "#00FF9C",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1rem",
+                        "2xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .card-gradient-active {
+                background: linear-gradient(135deg, rgba(0, 255, 156, 0.1) 0%, rgba(0, 255, 156, 0) 100%);
+            }
+        }
+    </style>
+<title>Diet Type Selection</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-deep-charcoal font-display text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="flex items-center p-4 pb-2 justify-between">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-white/70">arrow_back_ios_new</span>
+</button>
+<h2 class="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em] flex-1 text-center pr-10">
+                Dietary Preference
+            </h2>
+</div>
+<div class="px-8 pt-4 pb-2">
+<div class="flex items-center justify-between mb-3">
+<p class="text-white/40 text-[10px] font-bold uppercase tracking-wider">Step 2 of 5</p>
+<p class="text-white/40 text-[10px] font-bold">40%</p>
+</div>
+<div class="h-1 w-full rounded-full bg-white/10 overflow-hidden">
+<div class="h-full rounded-full bg-white/60" style="width: 40%;"></div>
+</div>
+</div>
+<div class="px-8 py-10">
+<h1 class="text-white tracking-tight text-3xl font-bold leading-tight mb-3">
+                Choose your <span class="text-accent-active">dietary fuel.</span>
+</h1>
+<p class="text-white/50 text-base font-light leading-relaxed max-w-[280px]">
+                Personalize your nutrition plan to match your lifestyle and goals.
+            </p>
+</div>
+<div class="flex flex-col gap-4 px-8 flex-1">
+<label class="relative group cursor-pointer">
+<input checked="" class="peer sr-only" name="diet" type="radio"/>
+<div class="flex items-center p-5 rounded-2xl border border-white/10 bg-white/[0.02] peer-checked:border-accent-active peer-checked:card-gradient-active transition-all duration-200">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white/5 text-white/40 peer-checked:text-accent-active mr-4">
+<span class="material-symbols-outlined text-2xl group-peer-checked:text-accent-active">eco</span>
+</div>
+<div class="flex-1">
+<h3 class="text-lg font-semibold text-white">Vegetarian</h3>
+<p class="text-xs text-white/40 font-normal">Plant-based proteins and greens.</p>
+</div>
+<div class="flex size-5 items-center justify-center rounded-full border border-white/20 peer-checked:border-accent-active peer-checked:bg-accent-active">
+<span class="material-symbols-outlined text-deep-charcoal text-[14px] font-bold opacity-0 peer-checked:opacity-100">check</span>
+</div>
+</div>
+</label>
+<label class="relative group cursor-pointer">
+<input class="peer sr-only" name="diet" type="radio"/>
+<div class="flex items-center p-5 rounded-2xl border border-white/10 bg-white/[0.02] peer-checked:border-accent-active peer-checked:card-gradient-active transition-all duration-200">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white/5 text-white/40 mr-4">
+<span class="material-symbols-outlined text-2xl">bolt</span>
+</div>
+<div class="flex-1">
+<h3 class="text-lg font-semibold text-white">Non-Vegetarian</h3>
+<p class="text-xs text-white/40 font-normal">Animal and plant-based protein.</p>
+</div>
+<div class="flex size-5 items-center justify-center rounded-full border border-white/20 peer-checked:border-accent-active peer-checked:bg-accent-active">
+<span class="material-symbols-outlined text-deep-charcoal text-[14px] font-bold opacity-0 peer-checked:opacity-100">check</span>
+</div>
+</div>
+</label>
+<div class="mt-4 rounded-2xl overflow-hidden aspect-[16/7] relative border border-white/10 bg-black/20">
+<div class="absolute inset-0 opacity-40 mix-blend-overlay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAMYPCApqJnTgJfC1CKLxcv1qJTGGHGBV1eHImMLOOUqsT9T3fwSag0bLb7R5bM_LNz8Qxq3taWIuHJi7WuEPkrzmljT-O5d5pnsBcgtOdF4wYtFXqgjvtjhpNSZ2O-bZJbXgGyyzBgoqwR9iYvqwMNJQtaCHX6nytHMb3hT7esr2VbiyLlGRGd7Gghtkht3z6QKI4DUyr6EHtdtDVE5ARUWBlaK-NbNqo35BGIPej-ypCvIh1yqtxEaqbWeD8AnwE5yTx2LY_oog'); background-size: cover; background-position: center;"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-deep-charcoal via-deep-charcoal/80 to-transparent flex flex-col justify-center px-6">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-white/40 text-sm">psychology</span>
+<p class="text-white/40 text-[9px] font-bold uppercase tracking-widest">System Insight</p>
+</div>
+<p class="text-white/80 text-sm leading-snug font-medium max-w-[180px]">Macros are auto-adjusted based on your selection for optimal recovery.</p>
+</div>
+</div>
+</div>
+<div class="p-8">
+<button class="w-full bg-accent-active py-4 rounded-2xl text-deep-charcoal font-bold text-lg active:scale-[0.98] transition-all tracking-tight">
+                Continue
+            </button>
+<p class="text-center mt-6 text-[10px] text-white/30 font-bold uppercase tracking-widest">
+                Baseline Phase 2
+            </p>
+</div>
+</div>
+
+</body></html>
