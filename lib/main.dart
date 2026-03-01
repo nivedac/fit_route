@@ -13,6 +13,10 @@ import 'screens/food_selection_screen.dart';
 import 'screens/generating_plan_screen.dart';
 import 'screens/plan_result_screen.dart';
 import 'screens/terms_conditions_screen.dart';
+import 'screens/home_dashboard_screen.dart';
+import 'screens/tracker_screen.dart';
+import 'screens/progress_screen.dart';
+import 'screens/profile_screen.dart';
 
 void main() {
   runApp(
@@ -47,6 +51,10 @@ class FitRouteApp extends StatelessWidget {
         '/generating-plan': (context) => const GeneratingPlanScreen(),
         '/plan-result': (context) => const PlanResultScreen(),
         '/terms': (context) => const TermsConditionsScreen(),
+        '/home': (context) => const HomeDashboardScreen(),
+        '/tracker': (context) => const TrackerScreen(),
+        '/progress': (context) => const ProgressScreen(),
+        '/profile': (context) => const ProfileScreen(),
       },
     );
   }

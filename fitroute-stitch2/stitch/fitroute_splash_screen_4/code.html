@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Android User Profile - Refined Dark</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "charcoal": "#121212",
+                        "surface": "#1E1E1E",
+                        "accent-orange": "#E67E22",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --bg-charcoal: #121212;
+            --surface-elevated: #1E1E1E;
+            --accent-sunset: #E67E22;
+        }
+        body {
+            background-color: var(--bg-charcoal);
+            color: #FFFFFF;
+        }
+        .profile-border {
+            border: 2px solid var(--accent-sunset);
+            box-shadow: 0 0 15px rgba(230, 126, 34, 0.2);
+        }
+        .list-item-active:active {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display overflow-hidden select-none bg-charcoal h-screen flex flex-col">
+<div class="h-11 w-full flex items-center justify-between px-6 pt-2">
+<span class="text-[14px] font-semibold text-white">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-[18px] text-white">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[18px] text-white">wifi</span>
+<span class="material-symbols-outlined text-[18px] text-white">battery_full_alt</span>
+</div>
+</div>
+<header class="flex items-center px-4 py-3">
+<button class="p-2 text-white/70">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="ml-2 text-xl font-medium">Profile</h1>
+<div class="ml-auto">
+<button class="p-2 text-white/70">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto px-6 pb-20">
+<div class="flex flex-col items-center mt-6 mb-10">
+<div class="relative">
+<div class="w-28 h-28 rounded-full profile-border p-1 bg-charcoal">
+<img alt="User Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbHu4Jj307SCPwwGgWFUrhafAUnL72_eYcFnIyPFDnlJwLuuh2zk7eZEjS-toDzUQCSXDF73hbA1WBHHLa60sLNDKBtg9ARbTY2axeGOMjFAQOtVqbEU-vbDIhrQWFSlov10Qt3zkvxXaY9vQentVB12ajmjIkhHNJC4MACPgGdoHC5lVUnRyTBUQ1230e8UBdzi-iS3IcdgMGZyjMeDPMbPcy60PTxcPq7545fGapTmaZyLzQVZSVtkJqdqvJczkwZbveHKpjzA"/>
+</div>
+<div class="absolute bottom-0 right-1 bg-accent-orange text-white p-1.5 rounded-full border-2 border-charcoal">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 600;">edit</span>
+</div>
+</div>
+<div class="mt-4 text-center">
+<h2 class="text-2xl font-bold tracking-tight text-white">Alex Johnson</h2>
+<p class="text-white/50 text-sm mt-0.5">alex.johnson@fitroute.ai</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-10">
+<div class="bg-surface rounded-2xl p-4 flex flex-col items-center border border-white/5">
+<span class="text-accent-orange font-bold text-lg">72</span>
+<span class="text-white/40 text-[10px] uppercase tracking-wider font-semibold">kg</span>
+</div>
+<div class="bg-surface rounded-2xl p-4 flex flex-col items-center border border-white/5">
+<span class="text-accent-orange font-bold text-lg">182</span>
+<span class="text-white/40 text-[10px] uppercase tracking-wider font-semibold">cm</span>
+</div>
+<div class="bg-surface rounded-2xl p-4 flex flex-col items-center border border-white/5">
+<span class="text-accent-orange font-bold text-lg">24</span>
+<span class="text-white/40 text-[10px] uppercase tracking-wider font-semibold">yrs</span>
+</div>
+</div>
+<div class="space-y-2">
+<p class="text-[11px] text-white/30 uppercase tracking-[0.2em] font-bold mb-4 ml-2">Account Settings</p>
+<div class="list-item-active flex items-center gap-4 p-4 rounded-2xl bg-surface/40 border border-white/5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-accent-orange/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-orange">person</span>
+</div>
+<div class="flex-1">
+<h3 class="text-white font-medium">Edit Profile</h3>
+<p class="text-white/40 text-xs">Update your personal details</p>
+</div>
+<span class="material-symbols-outlined text-white/20">chevron_right</span>
+</div>
+<div class="list-item-active flex items-center gap-4 p-4 rounded-2xl bg-surface/40 border border-white/5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-accent-orange/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-orange">notifications</span>
+</div>
+<div class="flex-1">
+<h3 class="text-white font-medium">Notifications</h3>
+<p class="text-white/40 text-xs">Manage your app alerts</p>
+</div>
+<span class="material-symbols-outlined text-white/20">chevron_right</span>
+</div>
+<div class="list-item-active flex items-center gap-4 p-4 rounded-2xl bg-surface/40 border border-white/5 cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-accent-orange/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-orange">security</span>
+</div>
+<div class="flex-1">
+<h3 class="text-white font-medium">Privacy &amp; Security</h3>
+<p class="text-white/40 text-xs">Data protection settings</p>
+</div>
+<span class="material-symbols-outlined text-white/20">chevron_right</span>
+</div>
+<div class="list-item-active flex items-center gap-4 p-4 rounded-2xl bg-surface/40 border border-white/5 cursor-pointer mt-8">
+<div class="w-10 h-10 rounded-xl bg-accent-orange/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-orange">logout</span>
+</div>
+<div class="flex-1">
+<h3 class="text-white font-medium">Logout</h3>
+</div>
+<span class="material-symbols-outlined text-white/20">chevron_right</span>
+</div>
+</div>
+<div class="mt-12 text-center">
+<p class="text-[10px] text-white/20 uppercase tracking-[0.4em] font-semibold">
+                Version 2.4.0
+            </p>
+</div>
+</main>
+<div class="h-8 flex justify-center items-center">
+<div class="w-32 h-1 bg-white/10 rounded-full"></div>
+</div>
+
+</body></html>

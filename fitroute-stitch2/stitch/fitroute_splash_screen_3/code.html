@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitRoute - Progress Chart</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "charcoal": "#121212",
+                        "accent-orange": "#E67E22",
+                        "surface": "#1E1E1E",
+                        "surface-variant": "#2C2C2C",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --bg-charcoal: #121212;
+            --accent-orange: #E67E22;
+        }
+        body {
+            background-color: var(--bg-charcoal);
+            color: white;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(230, 126, 34, 0.15) 0%, rgba(230, 126, 34, 0) 100%);
+        }
+        .line-glow {
+            filter: drop-shadow(0 0 8px rgba(230, 126, 34, 0.4));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display overflow-x-hidden">
+<div class="h-11 w-full flex items-center justify-between px-8 pt-4 sticky top-0 bg-charcoal/80 backdrop-blur-md z-50">
+<span class="text-[14px] font-semibold text-white">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-[18px] text-white">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[18px] text-white">wifi</span>
+<span class="material-symbols-outlined text-[18px] text-white">battery_full_alt</span>
+</div>
+</div>
+<header class="flex items-center justify-between px-6 py-4">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined text-white">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold">Progress Chart</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5">
+<span class="material-symbols-outlined text-white">share</span>
+</button>
+</header>
+<main class="px-6 pb-24">
+<div class="grid grid-cols-2 gap-4 mt-4">
+<div class="bg-surface p-5 rounded-[24px] border border-white/5">
+<p class="text-white/50 text-xs font-medium uppercase tracking-wider mb-1">Current Weight</p>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-bold text-white">76.4</span>
+<span class="text-accent-orange font-semibold text-sm">kg</span>
+</div>
+<div class="flex items-center gap-1 mt-2 text-green-400 text-xs">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+<span>-0.8 kg this week</span>
+</div>
+</div>
+<div class="bg-surface p-5 rounded-[24px] border border-white/5">
+<p class="text-white/50 text-xs font-medium uppercase tracking-wider mb-1">Target Goal</p>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-bold text-white">72.0</span>
+<span class="text-accent-orange font-semibold text-sm">kg</span>
+</div>
+<div class="flex items-center gap-1 mt-2 text-white/30 text-xs">
+<span class="material-symbols-outlined text-sm">flag</span>
+<span>4.4 kg to go</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center mt-8 px-2">
+<button class="px-4 py-2 text-sm font-medium text-white/40 hover:text-white">1W</button>
+<button class="px-4 py-2 text-sm font-medium text-accent-orange bg-accent-orange/10 rounded-full">1M</button>
+<button class="px-4 py-2 text-sm font-medium text-white/40 hover:text-white">3M</button>
+<button class="px-4 py-2 text-sm font-medium text-white/40 hover:text-white">1Y</button>
+<button class="px-4 py-2 text-sm font-medium text-white/40 hover:text-white">All</button>
+</div>
+<div class="relative mt-8 h-64 w-full">
+<div class="absolute inset-0 flex flex-col justify-between py-2">
+<div class="border-t border-white/[0.03] w-full"></div>
+<div class="border-t border-white/[0.03] w-full"></div>
+<div class="border-t border-white/[0.03] w-full"></div>
+<div class="border-t border-white/[0.03] w-full"></div>
+<div class="border-t border-white/[0.03] w-full"></div>
+</div>
+<svg class="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
+<path d="M 0,40 Q 20,35 40,55 T 80,45 T 100,20 L 100,100 L 0,100 Z" fill="url(#chartGradient)" opacity="0.4"></path>
+<path class="line-glow" d="M 0,40 Q 20,35 40,55 T 80,45 T 100,20" fill="none" stroke="#E67E22" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="80" cy="45" fill="#E67E22" r="4"></circle>
+<circle cx="80" cy="45" fill="#E67E22" opacity="0.2" r="8"></circle>
+<defs>
+<linearGradient id="chartGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:var(--accent-orange);stop-opacity:0.3"></stop>
+<stop offset="100%" style="stop-color:var(--accent-orange);stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute top-[35%] left-[72%] -translate-x-1/2 -translate-y-full bg-surface-variant border border-white/10 px-3 py-1.5 rounded-xl shadow-2xl">
+<span class="text-xs font-bold text-white">76.4 kg</span>
+<p class="text-[8px] text-white/50 uppercase leading-none">Oct 12</p>
+</div>
+</div>
+<div class="flex justify-between px-2 mt-4">
+<span class="text-[10px] text-white/30 font-medium">SEP 15</span>
+<span class="text-[10px] text-white/30 font-medium">SEP 30</span>
+<span class="text-[10px] text-white/30 font-medium">OCT 15</span>
+</div>
+<div class="mt-10">
+<h3 class="text-lg font-bold mb-4">Daily Logs</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface rounded-2xl border border-white/5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-orange">scale</span>
+</div>
+<div>
+<p class="text-sm font-medium">Today, 08:30 AM</p>
+<p class="text-xs text-white/40">Logged manually</p>
+</div>
+</div>
+<span class="font-bold">76.4 kg</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface rounded-2xl border border-white/5 opacity-70">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-white/40">scale</span>
+</div>
+<div>
+<p class="text-sm font-medium">Yesterday, 07:45 AM</p>
+<p class="text-xs text-white/40">From Smart Scale</p>
+</div>
+</div>
+<span class="font-bold">76.9 kg</span>
+</div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-charcoal/90 backdrop-blur-xl border-t border-white/5 h-20 px-6 flex items-center justify-between z-50">
+<button class="flex flex-col items-center gap-1 text-white/40">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-accent-orange">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">monitoring</span>
+<span class="text-[10px] font-medium">Progress</span>
+</button>
+<button class="bg-accent-orange text-white w-14 h-14 rounded-2xl flex items-center justify-center -mt-10 shadow-lg shadow-accent-orange/20">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-white/40">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-medium">Nutrition</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-white/40">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</nav>
+<div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/10 rounded-full z-[60]"></div>
+
+</body></html>

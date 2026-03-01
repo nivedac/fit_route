@@ -111,11 +111,11 @@ class PlanResultScreen extends StatelessWidget {
         decoration: const BoxDecoration(color: Color(0xFF151516), border: Border(top: BorderSide(color: Colors.white10))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            _NavIcon(icon: Icons.flash_on, label: 'Today', isSelected: true),
-            _NavIcon(icon: Icons.auto_awesome_motion, label: 'Plans', isSelected: false),
-            _NavIcon(icon: Icons.insights, label: 'Insights', isSelected: false),
-            _NavIcon(icon: Icons.person_outline, label: 'Profile', isSelected: false),
+          children: [
+            _NavIcon(icon: Icons.home, label: 'Home', isSelected: false, route: '/home', context: context),
+            _NavIcon(icon: Icons.auto_awesome_motion, label: 'Plans', isSelected: true, route: '/plan-result', context: context),
+            _NavIcon(icon: Icons.insights, label: 'Insights', isSelected: false, route: '/progress', context: context),
+            _NavIcon(icon: Icons.person_outline, label: 'Profile', isSelected: false, route: '/profile', context: context),
           ],
         ),
       ),
@@ -241,19 +241,34 @@ class _NavIcon extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isSelected;
+  final String route;
+  final BuildContext context;
 
-  const _NavIcon({required this.icon, required this.label, required this.isSelected});
+  const _NavIcon({
+    required this.icon, 
+    required this.label, 
+    required this.isSelected,
+    required this.route,
+    required this.context,
+  });
 
   @override
   Widget build(BuildContext context) {
     final color = isSelected ? const Color(0xFFD0BCFF) : Colors.grey.withOpacity(0.5);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: color, size: 24),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
-      ],
+    return InkWell(
+      onTap: () {
+        if (!isSelected) {
+          Navigator.pushReplacementNamed(context, route);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 4),
+          Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 }
