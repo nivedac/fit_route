@@ -1,8 +1,50 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 
-class PlanResultScreen extends StatelessWidget {
+class PlanResultScreen extends StatefulWidget {
   const PlanResultScreen({super.key});
+
+  @override
+  State<PlanResultScreen> createState() => _PlanResultScreenState();
+}
+
+class _PlanResultScreenState extends State<PlanResultScreen> {
+  DateTime _selectedDate = DateTime.now();
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2024),
+      lastDate: DateTime(2027),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color(0xFFD0BCFF),
+              surface: AppTheme.surface,
+              onSurface: Colors.white,
+            ),
+            dialogTheme: DialogThemeData(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
+  }
+
+  String get _formattedDate {
+    final months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    final now = DateTime.now();
+    final isToday = _selectedDate.year == now.year && _selectedDate.month == now.month && _selectedDate.day == now.day;
+    final prefix = isToday ? 'TODAY' : _selectedDate.weekday == now.weekday ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][_selectedDate.weekday - 1];
+    return '$prefix, ${months[_selectedDate.month - 1]} ${_selectedDate.day.toString().padLeft(2, '0')}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +61,20 @@ class PlanResultScreen extends StatelessWidget {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('TODAY, MAR 01', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1.5)),
-                      SizedBox(height: 4),
-                      Text('Plan Strategy', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    children: [
+                      Text(_formattedDate, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1.5)),
+                      const SizedBox(height: 4),
+                      const Text('Plan Strategy', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     ],
                   ),
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
-                    child: const Icon(Icons.calendar_today, size: 20),
+                  GestureDetector(
+                    onTap: _pickDate,
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white10)),
+                      child: const Icon(Icons.calendar_today, size: 20),
+                    ),
                   ),
                 ],
               ),
@@ -84,38 +129,69 @@ class PlanResultScreen extends StatelessWidget {
                   const Text('TODAY\'S WORKOUT', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 2)),
                   const SizedBox(height: 16),
                   
-                  // Workout Cards
-                  const _SubSessionCard(title: 'Core Stability', duration: '15 MINS', difficulty: 'INTERMEDIATE', icon: Icons.accessibility_new),
+                  // Workout Cards — now tappable
+                  _SubSessionCard(
+                    title: 'Core Stability',
+                    duration: '15 MINS',
+                    difficulty: 'INTERMEDIATE',
+                    icon: Icons.accessibility_new,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/workout-detail', arguments: {
+                        'title': 'Core Stability',
+                        'duration': '15 MINS',
+                        'difficulty': 'INTERMEDIATE',
+                      });
+                    },
+                  ),
                   const SizedBox(height: 12),
-                  const _SubSessionCard(title: 'Strength Baseline', duration: '45 MINS', difficulty: 'ADVANCED', icon: Icons.fitness_center),
+                  _SubSessionCard(
+                    title: 'Strength Baseline',
+                    duration: '45 MINS',
+                    difficulty: 'ADVANCED',
+                    icon: Icons.fitness_center,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/workout-detail', arguments: {
+                        'title': 'Strength Baseline',
+                        'duration': '45 MINS',
+                        'difficulty': 'ADVANCED',
+                      });
+                    },
+                  ),
                   
                   const SizedBox(height: 32),
                   
                   const Text('MEAL STRATEGY', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 2)),
                   const SizedBox(height: 16),
                   
-                  const _MealCard(title: 'Protein-Rich Breakfast', subtitle: '450 kcal • High recovery focus', icon: Icons.breakfast_dining),
+                  // Meal Cards — now tappable
+                  _MealCard(
+                    title: 'Protein-Rich Breakfast',
+                    subtitle: '450 kcal • High recovery focus',
+                    icon: Icons.breakfast_dining,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/meal-detail', arguments: {
+                        'title': 'Protein-Rich Breakfast',
+                        'calories': '450 kcal',
+                      });
+                    },
+                  ),
                   const SizedBox(height: 12),
-                  const _MealCard(title: 'Peak Performance Lunch', subtitle: '750 kcal • Balanced macros', icon: Icons.lunch_dining),
+                  _MealCard(
+                    title: 'Peak Performance Lunch',
+                    subtitle: '750 kcal • Balanced macros',
+                    icon: Icons.lunch_dining,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/meal-detail', arguments: {
+                        'title': 'Peak Performance Lunch',
+                        'calories': '750 kcal',
+                      });
+                    },
+                  ),
                   
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 84,
-        padding: const EdgeInsets.only(bottom: 24),
-        decoration: const BoxDecoration(color: Color(0xFF151516), border: Border(top: BorderSide(color: Colors.white10))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _NavIcon(icon: Icons.home, label: 'Home', isSelected: false, route: '/home', context: context),
-            _NavIcon(icon: Icons.auto_awesome_motion, label: 'Plans', isSelected: true, route: '/plan-result', context: context),
-            _NavIcon(icon: Icons.insights, label: 'Insights', isSelected: false, route: '/progress', context: context),
-            _NavIcon(icon: Icons.person_outline, label: 'Profile', isSelected: false, route: '/profile', context: context),
           ],
         ),
       ),
@@ -162,43 +238,53 @@ class _SubSessionCard extends StatelessWidget {
   final String duration;
   final String difficulty;
   final IconData icon;
+  final VoidCallback onTap;
 
-  const _SubSessionCard({required this.title, required this.duration, required this.difficulty, required this.icon});
+  const _SubSessionCard({
+    required this.title,
+    required this.duration,
+    required this.difficulty,
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white10)),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.03), borderRadius: BorderRadius.circular(14)),
-            child: Icon(icon, color: Colors.white54, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(duration, style: const TextStyle(fontSize: 10, color: Colors.grey, fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 8),
-                    Container(width: 3, height: 3, decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white24)),
-                    const SizedBox(width: 8),
-                    Text(difficulty, style: const TextStyle(fontSize: 10, color: AppTheme.accentCyan, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white10)),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.03), borderRadius: BorderRadius.circular(14)),
+              child: Icon(icon, color: Colors.white54, size: 24),
             ),
-          ),
-          const Icon(Icons.play_circle_outline, color: Colors.white38, size: 28),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(duration, style: const TextStyle(fontSize: 10, color: Colors.grey, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 8),
+                      Container(width: 3, height: 3, decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white24)),
+                      const SizedBox(width: 8),
+                      Text(difficulty, style: const TextStyle(fontSize: 10, color: AppTheme.accentCyan, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: Colors.white38, size: 28),
+          ],
+        ),
       ),
     );
   }
@@ -208,66 +294,39 @@ class _MealCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  final VoidCallback onTap;
 
-  const _MealCard({required this.title, required this.subtitle, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(40), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white10)),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white24, size: 24),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                const SizedBox(height: 2),
-                Text(subtitle, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right, color: Colors.white24, size: 20),
-        ],
-      ),
-    );
-  }
-}
-
-class _NavIcon extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final String route;
-  final BuildContext context;
-
-  const _NavIcon({
-    required this.icon, 
-    required this.label, 
-    required this.isSelected,
-    required this.route,
-    required this.context,
+  const _MealCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected ? const Color(0xFFD0BCFF) : Colors.grey.withOpacity(0.5);
-    return InkWell(
-      onTap: () {
-        if (!isSelected) {
-          Navigator.pushReplacementNamed(context, route);
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 4),
-          Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(color: Colors.black.withAlpha(40), borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white10)),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white24, size: 24),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 2),
+                  Text(subtitle, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white24, size: 20),
+          ],
+        ),
       ),
     );
   }

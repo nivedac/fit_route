@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../theme.dart';
 import '../providers/user_provider.dart';
 
 class GeneratingPlanScreen extends StatefulWidget {
@@ -24,7 +23,8 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
       await Future.delayed(const Duration(milliseconds: 500));
     }
     if (mounted) {
-      Navigator.pushReplacementNamed(context, '/plan-result');
+      // Clear the entire back stack (onboarding screens) and go to main app
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false, arguments: 1);
     }
   }
 

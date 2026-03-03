@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Android Privacy &amp; Security Refined</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#f28b0d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#121212",
+              "surface-dark": "#1e1e1e",
+              "border-dark": "#2c2c2c"
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-border-dark">
+<div class="flex items-center p-4 justify-between max-w-md mx-auto w-full">
+<div class="flex items-center gap-4">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-surface-dark transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight">Privacy &amp; Security</h1>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-surface-dark transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">search</span>
+</button>
+</div>
+</header>
+<main class="flex-1 max-w-md mx-auto w-full pb-24">
+<div class="p-4">
+<div class="relative overflow-hidden rounded-xl mb-6 bg-gradient-to-br from-primary/20 to-transparent p-6 border border-primary/10">
+<div class="relative z-10">
+<h2 class="text-primary font-bold text-sm uppercase tracking-wider mb-1">Security Score</h2>
+<p class="text-3xl font-bold mb-2">Strong</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Your account is well protected. Keep your recovery info updated for maximum safety.</p>
+</div>
+<div class="absolute top-0 right-0 p-4 opacity-20">
+<span class="material-symbols-outlined text-6xl text-primary">verified_user</span>
+</div>
+</div>
+<section class="mb-8">
+<h3 class="text-primary text-xs font-bold uppercase tracking-[0.1em] px-2 mb-3">Login &amp; Access</h3>
+<div class="space-y-1">
+<a class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-surface-dark hover:bg-slate-100 dark:hover:bg-border-dark transition-colors border border-transparent dark:border-border-dark/50" href="#">
+<div class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-base">Change Password</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Last changed 3 months ago</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-surface-dark hover:bg-slate-100 dark:hover:bg-border-dark transition-colors border border-transparent dark:border-border-dark/50" href="#">
+<div class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">enhanced_encryption</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-base">Two-Factor Authentication</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Secured via SMS and App</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</a>
+</div>
+</section>
+<section class="mb-8">
+<h3 class="text-primary text-xs font-bold uppercase tracking-[0.1em] px-2 mb-3">Data &amp; Privacy</h3>
+<div class="space-y-1">
+<a class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-surface-dark hover:bg-slate-100 dark:hover:bg-border-dark transition-colors border border-transparent dark:border-border-dark/50" href="#">
+<div class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">safety_check</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-base">Data Permissions</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Manage how we use your fitness data</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-surface-dark hover:bg-slate-100 dark:hover:bg-border-dark transition-colors border border-transparent dark:border-border-dark/50" href="#">
+<div class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">visibility_off</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-base">Profile Visibility</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Set to 'Friends Only'</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</a>
+</div>
+</section>
+<section>
+<h3 class="text-primary text-xs font-bold uppercase tracking-[0.1em] px-2 mb-3">Advanced</h3>
+<div class="space-y-1">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-surface-dark border border-transparent dark:border-border-dark/50">
+<div class="flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">devices</span>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-base">Logged Devices</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">2 active sessions</p>
+</div>
+<button class="px-4 py-1.5 bg-primary/20 text-primary text-xs font-bold rounded-full hover:bg-primary/30 transition-colors">Manage</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-surface-dark border-t border-slate-200 dark:border-border-dark pb-safe">
+<div class="flex justify-around items-center h-16 max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="text-[10px] font-medium">Workout</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-medium">Nutrition</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-fill">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</a>
+</div>
+</nav>
+</body></html>

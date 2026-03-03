@@ -11,6 +11,7 @@ class TrackerScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
@@ -127,7 +128,16 @@ class TrackerScreen extends StatelessWidget {
                     ],
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Weight logged! ✅'),
+                          backgroundColor: AppTheme.sunsetOrange,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.sunsetOrange,
                       foregroundColor: AppTheme.charcoal,
@@ -223,41 +233,10 @@ class TrackerScreen extends StatelessWidget {
                 const Text('46% DONE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white54)),
               ],
             ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 24),
           ],
         ),
       ),
-      bottomNavigationBar: const _BottomNav(currentIndex: 2),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: AppTheme.charcoal.withOpacity(0.9),
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: AppTheme.sunsetOrange,
-      unselectedItemColor: Colors.white54,
-      currentIndex: currentIndex,
-      selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: const TextStyle(fontSize: 10),
-      onTap: (index) {
-        if (index == 0) Navigator.pushReplacementNamed(context, '/home');
-        if (index == 1) Navigator.pushReplacementNamed(context, '/progress');
-        // index 2 is current
-        if (index == 3) Navigator.pushReplacementNamed(context, '/profile');
-      },
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Progress'),
-        BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Tracker'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      ],
     );
   }
 }

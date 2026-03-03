@@ -3,8 +3,152 @@ import 'package:provider/provider.dart';
 import '../theme.dart';
 import '../providers/user_provider.dart';
 
-class FoodSelectionScreen extends StatelessWidget {
+class FoodSelectionScreen extends StatefulWidget {
   const FoodSelectionScreen({super.key});
+
+  @override
+  State<FoodSelectionScreen> createState() => _FoodSelectionScreenState();
+}
+
+class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _customFoodController = TextEditingController();
+
+  final Map<String, List<Map<String, dynamic>>> _categories = {
+    'Carbohydrates': [
+      {'name': 'Basmati Rice', 'icon': Icons.grass},
+      {'name': 'Rolled Oats', 'icon': Icons.bakery_dining},
+    ],
+    'Proteins': [
+      {'name': 'Free Range Eggs', 'icon': Icons.egg},
+      {'name': 'Chicken Breast', 'icon': Icons.kebab_dining},
+    ],
+    'Greens & Fruit': [
+      {'name': 'Broccoli & Spinach', 'icon': Icons.eco},
+      {'name': 'Mixed Berries', 'icon': Icons.restaurant},
+    ],
+  };
+
+  List<String> _customFoods = [];
+  String _searchQuery = '';
+
+  void _showAddFoodDialog() {
+    _customFoodController.clear();
+    String selectedCategory = 'Carbohydrates';
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppTheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 24,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text('Add Custom Food Item', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+              const SizedBox(height: 8),
+              Text('Add your own food to the selection list.',
+                  style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 14)),
+              const SizedBox(height: 24),
+
+              // Food Name Input
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: TextField(
+                  controller: _customFoodController,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  decoration: InputDecoration(
+                    hintText: 'e.g. Greek Yogurt, Quinoa, Salmon...',
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    prefixIcon: Icon(Icons.fastfood, color: Colors.white.withOpacity(0.4)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Category Dropdown
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                ),
+                child: DropdownButton<String>(
+                  value: selectedCategory,
+                  isExpanded: true,
+                  dropdownColor: AppTheme.surface,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.white54),
+                  items: _categories.keys.map((cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
+                  onChanged: (val) {
+                    if (val != null) setSheetState(() => selectedCategory = val);
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Add Button
+              ElevatedButton(
+                onPressed: () {
+                  final name = _customFoodController.text.trim();
+                  if (name.isNotEmpty) {
+                    setState(() {
+                      _categories[selectedCategory]!.add({'name': name, 'icon': Icons.add_circle_outline});
+                      _customFoods.add(name);
+                    });
+                    final userProvider = Provider.of<UserProvider>(context, listen: false);
+                    userProvider.toggleFood(name); // Auto-select it
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('\'$name\' added to $selectedCategory!'),
+                        backgroundColor: AppTheme.accentEmerald,
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.accentEmerald,
+                  foregroundColor: AppTheme.charcoal,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: const Text('Add Food Item', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +177,9 @@ class FoodSelectionScreen extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.more_vert),
+                        onPressed: _showAddFoodDialog,
+                        icon: const Icon(Icons.add_circle_outline, color: AppTheme.accentEmerald),
+                        tooltip: 'Add custom food',
                       ),
                     ],
                   ),
@@ -54,16 +199,27 @@ class FoodSelectionScreen extends StatelessWidget {
                       children: [
                         const Icon(Icons.search, color: Colors.grey),
                         const SizedBox(width: 12),
-                        const Expanded(
+                        Expanded(
                           child: TextField(
-                            decoration: InputDecoration(
+                            controller: _searchController,
+                            onChanged: (val) => setState(() => _searchQuery = val.toLowerCase()),
+                            decoration: const InputDecoration(
                               hintText: 'Search ingredients...',
                               hintStyle: TextStyle(color: Colors.grey),
                               border: InputBorder.none,
                             ),
                           ),
                         ),
-                        const Icon(Icons.mic, color: Colors.grey),
+                        if (_searchQuery.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.grey),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                          )
+                        else
+                          const Icon(Icons.mic, color: Colors.grey),
                       ],
                     ),
                   ),
@@ -73,29 +229,16 @@ class FoodSelectionScreen extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 180),
-                    children: [
-                      _CategorySection(
-                        title: 'Carbohydrates',
-                        items: [
-                          _FoodItem(name: 'Basmati Rice', icon: Icons.grass),
-                          _FoodItem(name: 'Rolled Oats', icon: Icons.bakery_dining),
-                        ],
-                      ),
-                      _CategorySection(
-                        title: 'Proteins',
-                        items: [
-                          _FoodItem(name: 'Free Range Eggs', icon: Icons.egg),
-                          _FoodItem(name: 'Chicken Breast', icon: Icons.kebab_dining),
-                        ],
-                      ),
-                      _CategorySection(
-                        title: 'Greens & Fruit',
-                        items: [
-                          _FoodItem(name: 'Broccoli & Spinach', icon: Icons.eco),
-                          _FoodItem(name: 'Mixed Berries', icon: Icons.restaurant),
-                        ],
-                      ),
-                    ],
+                    children: _categories.entries.map((entry) {
+                      final filteredItems = entry.value.where((item) {
+                        return _searchQuery.isEmpty || (item['name'] as String).toLowerCase().contains(_searchQuery);
+                      }).toList();
+                      if (filteredItems.isEmpty) return const SizedBox.shrink();
+                      return _CategorySection(
+                        title: entry.key,
+                        items: filteredItems.map((item) => _FoodItem(name: item['name'] as String, icon: item['icon'] as IconData)).toList(),
+                      );
+                    }).toList(),
                   ),
                 ),
               ],
@@ -103,7 +246,7 @@ class FoodSelectionScreen extends StatelessWidget {
             
             // Generate Button Overlay
             Positioned(
-              bottom: 80,
+              bottom: 0,
               left: 0,
               right: 0,
               child: Container(
@@ -115,49 +258,28 @@ class FoodSelectionScreen extends StatelessWidget {
                     colors: [AppTheme.charcoal.withOpacity(0), AppTheme.charcoal],
                   ),
                 ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    userProvider.startGeneration();
-                    Navigator.pushNamed(context, '/generating-plan');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accentEmerald,
-                    foregroundColor: AppTheme.charcoal,
-                    minimumSize: const Size(double.infinity, 60),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                child: SafeArea(
+                  top: false,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      userProvider.startGeneration();
+                      Navigator.pushNamed(context, '/generating-plan');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.accentEmerald,
+                      foregroundColor: AppTheme.charcoal,
+                      minimumSize: const Size(double.infinity, 60),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.bolt),
+                        SizedBox(width: 8),
+                        Text('GENERATE PLAN', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.bolt, fontWeight: FontWeight.bold),
-                      SizedBox(width: 8),
-                      Text('GENERATE PLAN', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            
-            // Bottom Navbar
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 80,
-                decoration: const BoxDecoration(
-                  color: AppTheme.surface,
-                  border: Border(top: BorderSide(color: Colors.white10)),
-                ),
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    _NavButton(icon: Icons.home, label: 'Home', isSelected: false),
-                    _NavButton(icon: Icons.description, label: 'Plans', isSelected: true),
-                    _NavButton(icon: Icons.assessment, label: 'Activity', isSelected: false),
-                    _NavButton(icon: Icons.person, label: 'Profile', isSelected: false),
-                  ],
                 ),
               ),
             ),
@@ -213,7 +335,7 @@ class _FoodItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppTheme.surface,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: isSelected ? AppTheme.accentEmerald.withOpacity(0.3) : Colors.white.withOpacity(0.05)),
           ),
           child: Row(
             children: [
@@ -240,23 +362,5 @@ class _FoodItem extends StatelessWidget {
   }
 }
 
-class _NavButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
 
-  const _NavButton({required this.icon, required this.label, required this.isSelected});
 
-  @override
-  Widget build(BuildContext context) {
-    final color = isSelected ? AppTheme.accentEmerald : Colors.grey;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color, size: 24),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w500)),
-      ],
-    );
-  }
-}

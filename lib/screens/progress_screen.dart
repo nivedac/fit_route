@@ -1,11 +1,57 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 
-class ProgressScreen extends StatelessWidget {
+class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
 
   @override
+  State<ProgressScreen> createState() => _ProgressScreenState();
+}
+
+class _ProgressScreenState extends State<ProgressScreen> {
+  String _selectedFilter = '1M';
+
+  // Mock data for different time ranges
+  final Map<String, Map<String, dynamic>> _filterData = {
+    '1W': {
+      'points': [77.2, 77.0, 76.8, 76.9, 76.6, 76.5, 76.4],
+      'labels': ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+      'change': '-0.8 kg this week',
+      'current': '76.4',
+    },
+    '1M': {
+      'points': [78.5, 78.2, 77.8, 77.5, 77.9, 77.2, 76.8, 76.4],
+      'labels': ['SEP 15', 'SEP 20', 'SEP 25', 'SEP 30', 'OCT 05', 'OCT 10', 'OCT 12', 'OCT 15'],
+      'change': '-2.1 kg this month',
+      'current': '76.4',
+    },
+    '3M': {
+      'points': [82.0, 81.2, 80.5, 79.8, 79.0, 78.5, 77.8, 77.0, 76.4],
+      'labels': ['JUL', 'JUL', 'AUG', 'AUG', 'SEP', 'SEP', 'OCT', 'OCT', 'OCT'],
+      'change': '-5.6 kg in 3 months',
+      'current': '76.4',
+    },
+    '1Y': {
+      'points': [90.0, 88.5, 86.0, 84.5, 83.0, 81.5, 80.0, 78.5, 77.0, 76.4],
+      'labels': ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT'],
+      'change': '-13.6 kg this year',
+      'current': '76.4',
+    },
+    'All': {
+      'points': [95.0, 92.0, 90.0, 88.0, 86.0, 84.0, 82.0, 80.0, 78.0, 76.4],
+      'labels': ['2024', '', '2024', '', '2025', '', '2025', '', '2025', 'NOW'],
+      'change': '-18.6 kg total',
+      'current': '76.4',
+    },
+  };
+
+  @override
   Widget build(BuildContext context) {
+    final data = _filterData[_selectedFilter]!;
+    final points = data['points'] as List<double>;
+    final labels = data['labels'] as List<String>;
+    final change = data['change'] as String;
+
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
       appBar: AppBar(
@@ -55,10 +101,12 @@ class ProgressScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Row(
-                          children: const [
-                            Icon(Icons.trending_down, color: Colors.greenAccent, size: 14),
-                            SizedBox(width: 4),
-                            Text('-0.8 kg this week', style: TextStyle(color: Colors.greenAccent, fontSize: 12)),
+                          children: [
+                            const Icon(Icons.trending_down, color: Colors.greenAccent, size: 14),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(change, style: const TextStyle(color: Colors.greenAccent, fontSize: 12), overflow: TextOverflow.ellipsis),
+                            ),
                           ],
                         ),
                       ],
@@ -104,20 +152,40 @@ class ProgressScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
-            // Time Filters
+            // Time Filters — now functional
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _TimeFilter(label: '1W', isSelected: false),
-                _TimeFilter(label: '1M', isSelected: true),
-                _TimeFilter(label: '3M', isSelected: false),
-                _TimeFilter(label: '1Y', isSelected: false),
-                _TimeFilter(label: 'All', isSelected: false),
-              ],
+              children: ['1W', '1M', '3M', '1Y', 'All'].map((filter) {
+                final isSelected = _selectedFilter == filter;
+                return GestureDetector(
+                  onTap: () => setState(() => _selectedFilter = filter),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: isSelected
+                        ? BoxDecoration(
+                            color: AppTheme.sunsetOrange.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(color: AppTheme.sunsetOrange.withOpacity(0.3)),
+                          )
+                        : BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                    child: Text(
+                      filter,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                        color: isSelected ? AppTheme.sunsetOrange : Colors.white54,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 32),
 
-            // Chart area placeholder (using a container to represent the chart)
+            // Chart area — dynamic based on selected filter
             Container(
               height: 250,
               width: double.infinity,
@@ -138,15 +206,15 @@ class ProgressScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(5, (index) => const Divider(color: Colors.white10)),
                   ),
-                  // Mock Line Path
+                  // Dynamic chart line
                   CustomPaint(
                     size: const Size(double.infinity, 250),
-                    painter: _MockChartPainter(),
+                    painter: _DynamicChartPainter(points: points),
                   ),
-                  // Tooltip
+                  // Tooltip at last point
                   Positioned(
-                    right: 60,
-                    top: 80,
+                    right: 20,
+                    top: 60,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
@@ -156,9 +224,9 @@ class ProgressScreen extends StatelessWidget {
                         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 10)],
                       ),
                       child: Column(
-                        children: const [
-                          Text('76.4 kg', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                          Text('OCT 12', style: TextStyle(fontSize: 8, color: Colors.white54, fontWeight: FontWeight.bold)),
+                        children: [
+                          Text('${points.last} kg', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                          Text(labels.last, style: const TextStyle(fontSize: 8, color: Colors.white54, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -167,14 +235,17 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
             
-            // X-axis labels
+            // X-axis labels — dynamic
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('SEP 15', style: TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
-                Text('SEP 30', style: TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
-                Text('OCT 15', style: TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
+              children: [
+                if (labels.isNotEmpty)
+                  Text(labels.first, style: const TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
+                if (labels.length > 1)
+                  Text(labels[labels.length ~/ 2], style: const TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
+                if (labels.length > 2)
+                  Text(labels.last, style: const TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 40),
@@ -187,11 +258,10 @@ class ProgressScreen extends StatelessWidget {
             const SizedBox(height: 12),
             _LogItem(icon: Icons.scale, title: 'Yesterday, 07:45 AM', subtitle: 'From Smart Scale', value: '76.9 kg', opacity: 0.7),
             
-            const SizedBox(height: 80), // Bottom nav padding
+            const SizedBox(height: 80),
           ],
         ),
       ),
-      bottomNavigationBar: const _BottomNav(currentIndex: 1),
     );
   }
 }
@@ -253,92 +323,85 @@ class _LogItem extends StatelessWidget {
   }
 }
 
-class _TimeFilter extends StatelessWidget {
-  final String label;
-  final bool isSelected;
+class _DynamicChartPainter extends CustomPainter {
+  final List<double> points;
 
-  const _TimeFilter({required this.label, required this.isSelected});
+  _DynamicChartPainter({required this.points});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: isSelected
-          ? BoxDecoration(
-              color: AppTheme.sunsetOrange.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(100),
-            )
-          : null,
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: isSelected ? AppTheme.sunsetOrange : Colors.white54,
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: AppTheme.charcoal.withOpacity(0.9),
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: AppTheme.sunsetOrange,
-      unselectedItemColor: Colors.white54,
-      currentIndex: currentIndex,
-      selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: const TextStyle(fontSize: 10),
-      onTap: (index) {
-        if (index == 0) Navigator.pushReplacementNamed(context, '/home');
-        if (index == 2) Navigator.pushReplacementNamed(context, '/tracker');
-        if (index == 3) Navigator.pushReplacementNamed(context, '/profile');
-      },
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Progress'),
-        BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Tracker'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      ],
-    );
-  }
-}
-
-class _MockChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = AppTheme.sunsetOrange
+    if (points.isEmpty) return;
+
+    final maxVal = points.reduce((a, b) => a > b ? a : b);
+    final minVal = points.reduce((a, b) => a < b ? a : b);
+    final range = maxVal - minVal == 0 ? 1.0 : maxVal - minVal;
+
+    // Create normalized points
+    final chartPoints = <Offset>[];
+    for (int i = 0; i < points.length; i++) {
+      final x = i / (points.length - 1) * size.width;
+      final y = size.height - ((points[i] - minVal) / range * (size.height * 0.7) + size.height * 0.1);
+      chartPoints.add(Offset(x, y));
+    }
+
+    // Draw gradient fill
+    if (chartPoints.length >= 2) {
+      final fillPath = Path();
+      fillPath.moveTo(chartPoints.first.dx, size.height);
+      for (int i = 0; i < chartPoints.length - 1; i++) {
+        final p0 = chartPoints[i];
+        final p1 = chartPoints[i + 1];
+        final controlX = (p0.dx + p1.dx) / 2;
+        fillPath.cubicTo(controlX, p0.dy, controlX, p1.dy, p1.dx, p1.dy);
+      }
+      fillPath.lineTo(chartPoints.last.dx, size.height);
+      fillPath.close();
+
+      final fillPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFFFF4D00).withOpacity(0.15),
+            const Color(0xFFFF4D00).withOpacity(0.0),
+          ],
+        ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+
+      canvas.drawPath(fillPath, fillPaint);
+    }
+
+    // Draw line
+    final linePaint = Paint()
+      ..color = const Color(0xFFFF4D00)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3
-      ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 4);
+      ..strokeCap = StrokeCap.round;
 
-    var path = Path();
-    path.moveTo(0, size.height * 0.4);
-    path.quadraticBezierTo(size.width * 0.2, size.height * 0.35, size.width * 0.4, size.height * 0.55);
-    path.quadraticBezierTo(size.width * 0.6, size.height * 0.75, size.width * 0.8, size.height * 0.45);
-    path.quadraticBezierTo(size.width * 0.9, size.height * 0.3, size.width, size.height * 0.2);
+    final linePath = Path();
+    linePath.moveTo(chartPoints.first.dx, chartPoints.first.dy);
+    for (int i = 0; i < chartPoints.length - 1; i++) {
+      final p0 = chartPoints[i];
+      final p1 = chartPoints[i + 1];
+      final controlX = (p0.dx + p1.dx) / 2;
+      linePath.cubicTo(controlX, p0.dy, controlX, p1.dy, p1.dx, p1.dy);
+    }
+    canvas.drawPath(linePath, linePaint);
 
-    canvas.drawPath(path, paint);
-
-    var circlePaint = Paint()
-      ..color = AppTheme.sunsetOrange
+    // Draw glow on last point
+    final lastPoint = chartPoints.last;
+    final glowPaint = Paint()
+      ..color = const Color(0xFFFF4D00).withOpacity(0.2)
       ..style = PaintingStyle.fill;
-    
-    var glowPaint = Paint()
-      ..color = AppTheme.sunsetOrange.withOpacity(0.2)
-      ..style = PaintingStyle.fill;
+    canvas.drawCircle(lastPoint, 10, glowPaint);
 
-    canvas.drawCircle(Offset(size.width * 0.8, size.height * 0.45), 8, glowPaint);
-    canvas.drawCircle(Offset(size.width * 0.8, size.height * 0.45), 4, circlePaint);
+    final dotPaint = Paint()
+      ..color = const Color(0xFFFF4D00)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(lastPoint, 5, dotPaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _DynamicChartPainter oldDelegate) {
+    return oldDelegate.points != points;
+  }
 }

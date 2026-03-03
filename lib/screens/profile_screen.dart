@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
+import '../providers/user_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'Alex Johnson';
+    final displayEmail = userProvider.email.isNotEmpty ? userProvider.email : 'alex.johnson@fitroute.ai';
+
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white70),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: const Text('Profile', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
         centerTitle: false,
         actions: [
@@ -49,21 +52,24 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: AppTheme.sunsetOrange,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppTheme.charcoal, width: 2),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/edit-profile'),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppTheme.sunsetOrange,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppTheme.charcoal, width: 2),
+                    ),
+                    child: const Icon(Icons.edit, color: Colors.white, size: 16),
                   ),
-                  child: const Icon(Icons.edit, color: Colors.white, size: 16),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            const Text('Alex Johnson', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: -0.5)),
+            Text(displayName, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: -0.5)),
             const SizedBox(height: 2),
-            const Text('alex.johnson@fitroute.ai', style: TextStyle(fontSize: 14, color: Colors.white54)),
+            Text(displayEmail, style: const TextStyle(fontSize: 14, color: Colors.white54)),
             const SizedBox(height: 40),
 
             // Stats
@@ -92,21 +98,21 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.person,
               title: 'Edit Profile',
               subtitle: 'Update your personal details',
-              onTap: () {},
+              onTap: () => Navigator.pushNamed(context, '/edit-profile'),
             ),
             const SizedBox(height: 8),
             _SettingsTile(
               icon: Icons.notifications,
               title: 'Notifications',
               subtitle: 'Manage your app alerts',
-              onTap: () {},
+              onTap: () => Navigator.pushNamed(context, '/notifications'),
             ),
             const SizedBox(height: 8),
             _SettingsTile(
               icon: Icons.security,
               title: 'Privacy & Security',
               subtitle: 'Data protection settings',
-              onTap: () {},
+              onTap: () => Navigator.pushNamed(context, '/privacy-security'),
             ),
             const SizedBox(height: 32),
             _SettingsTile(
@@ -126,7 +132,6 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _BottomNav(currentIndex: 3),
     );
   }
 }
@@ -207,35 +212,6 @@ class _SettingsTile extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: AppTheme.charcoal.withOpacity(0.9),
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: AppTheme.sunsetOrange,
-      unselectedItemColor: Colors.white54,
-      currentIndex: currentIndex,
-      selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: const TextStyle(fontSize: 10),
-      onTap: (index) {
-        if (index == 0) Navigator.pushReplacementNamed(context, '/home');
-        if (index == 1) Navigator.pushReplacementNamed(context, '/progress');
-        if (index == 2) Navigator.pushReplacementNamed(context, '/tracker');
-      },
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Progress'),
-        BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Tracker'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      ],
     );
   }
 }

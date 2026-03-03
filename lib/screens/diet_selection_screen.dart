@@ -45,15 +45,15 @@ class DietSelectionScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        Text('Step 2 of 5', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
-                        Text('40%', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+                        Text('Step 5 of 5', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+                        Text('100%', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 12),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: const LinearProgressIndicator(
-                        value: 0.4,
+                        value: 1.0,
                         backgroundColor: Colors.white10,
                         valueColor: AlwaysStoppedAnimation(Colors.white60),
                         minHeight: 4,

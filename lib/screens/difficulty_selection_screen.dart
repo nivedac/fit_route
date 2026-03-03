@@ -43,7 +43,7 @@ class DifficultySelectionScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text('STEP 2 OF 5', style: TextStyle(color: Color(0xFFCCFF00), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                      Text('STEP 3 OF 5', style: TextStyle(color: Color(0xFFCCFF00), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
                       Text('Profile Setup', style: TextStyle(color: Colors.grey, fontSize: 10, fontWeight: FontWeight.w500)),
                     ],
                   ),
@@ -51,7 +51,7 @@ class DifficultySelectionScreen extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: const LinearProgressIndicator(
-                      value: 0.4,
+                      value: 0.6,
                       backgroundColor: Colors.white10,
                       valueColor: AlwaysStoppedAnimation(Color(0xFFCCFF00)),
                       minHeight: 4,

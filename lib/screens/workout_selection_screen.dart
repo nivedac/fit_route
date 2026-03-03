@@ -46,14 +46,14 @@ class WorkoutSelectionScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Text('PERSONALIZATION', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1.5)),
-                        Text('STEP 2/5', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFD0BCFF))),
+                        Text('STEP 3/5', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFD0BCFF))),
                       ],
                     ),
                     const SizedBox(height: 8),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: const LinearProgressIndicator(
-                        value: 0.4,
+                        value: 0.6,
                         backgroundColor: Colors.white10,
                         valueColor: AlwaysStoppedAnimation(Color(0xFFD0BCFF)),
                         minHeight: 6,

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
+import '../providers/user_provider.dart';
 
 class HomeDashboardScreen extends StatelessWidget {
   const HomeDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'Alex Johnson';
+
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
       body: SafeArea(
@@ -20,9 +25,9 @@ class HomeDashboardScreen extends StatelessWidget {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('Welcome back,', style: TextStyle(color: Colors.white54, fontSize: 14)),
-                      Text('Alex Johnson', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                    children: [
+                      const Text('Welcome back,', style: TextStyle(color: Colors.white54, fontSize: 14)),
+                      Text(displayName, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Container(
@@ -172,7 +177,9 @@ class HomeDashboardScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/active-workout');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: AppTheme.charcoal,
@@ -202,7 +209,10 @@ class HomeDashboardScreen extends StatelessWidget {
                       color: Colors.blueAccent,
                       title: 'Tracker',
                       subtitle: 'Log daily macros and hydration',
-                      onTap: () => Navigator.pushReplacementNamed(context, '/tracker'),
+                      onTap: () {
+                        // Navigate to tracker tab via MainScreen
+                        Navigator.pushReplacementNamed(context, '/main', arguments: 2);
+                      },
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -212,22 +222,17 @@ class HomeDashboardScreen extends StatelessWidget {
                       color: Colors.purpleAccent,
                       title: 'Progress',
                       subtitle: 'View performance insights',
-                      onTap: () => Navigator.pushReplacementNamed(context, '/progress'),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/progress');
+                      },
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 80), // Padding for bottom nav
+              const SizedBox(height: 24),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: _BottomNav(currentIndex: 0),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppTheme.sunsetOrange,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -252,6 +257,7 @@ class _QuickLinkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -277,73 +283,6 @@ class _QuickLinkCard extends StatelessWidget {
             Text(subtitle, style: const TextStyle(fontSize: 11, color: Colors.white54)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: AppTheme.charcoal.withOpacity(0.9),
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 8,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _NavItem(icon: Icons.home, label: 'Home', isSelected: currentIndex == 0, route: '/home', context: context),
-          _NavItem(icon: Icons.explore, label: 'Plans', isSelected: currentIndex == 1, route: '/plan-result', context: context),
-          const SizedBox(width: 48), // Space for FAB
-          _NavItem(icon: Icons.restaurant, label: 'Diet', isSelected: currentIndex == 2, route: '/tracker', context: context),
-          _NavItem(icon: Icons.person, label: 'Profile', isSelected: currentIndex == 3, route: '/profile', context: context),
-        ],
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final String route;
-  final BuildContext context;
-
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.route,
-    required this.context,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (!isSelected) {
-          Navigator.pushReplacementNamed(context, route);
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? AppTheme.sunsetOrange : Colors.white54),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: isSelected ? AppTheme.sunsetOrange : Colors.white54,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-        ],
       ),
     );
   }

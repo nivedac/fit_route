@@ -87,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.pushNamed(context, '/forgot-password'),
                         child: const Text('Forgot password?', style: TextStyle(color: AppTheme.sunsetOrange, fontSize: 12)),
                       ),
                     ),
