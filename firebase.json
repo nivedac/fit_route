@@ -26,10 +26,10 @@
   },
   "auth": {
     "providers": {
-      "anonymous": false,
+      "anonymous": true,
       "emailPassword": true,
       "googleSignIn": {
-        "oAuthBrandDisplayName": "FitRoute",
+        "oAuthBrandDisplayName": "fit_route",
         "supportEmail": "nived.n@hotmail.com"
       }
     }
