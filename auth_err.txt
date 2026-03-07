@@ -1,0 +1,11 @@
+﻿Analyzing auth_service.dart...
+
+  error - auth_service.dart:69:15 - The class 'GoogleSignIn' doesn't have an unnamed constructor. Try using one of the named constructors defined in 'GoogleSignIn'. - new_with_undefined_constructor_default
+  error - auth_service.dart:78:53 - The class 'GoogleSignIn' doesn't have an unnamed constructor. Try using one of the named constructors defined in 'GoogleSignIn'. - new_with_undefined_constructor_default
+  error - auth_service.dart:78:68 - The method 'signIn' isn't defined for the type 'GoogleSignIn'. Try correcting the name to the name of an existing method, or defining a method named 'signIn'. - undefined_method
+  error - auth_service.dart:90:33 - The getter 'accessToken' isn't defined for the type 'GoogleSignInAuthentication'. Try importing the library that defines 'accessToken', correcting the name to the name of an existing getter, or defining a getter or field named 'accessToken'. - undefined_getter
+   info - auth_service.dart:3:8 - The import of 'package:firebase_core/firebase_core.dart' is unnecessary because all of the used elements are also provided by the import of 'package:firebase_auth/firebase_auth.dart'. Try removing the import directive. - unnecessary_import
+   info - auth_service.dart:86:53 - Uses 'await' on an instance of 'GoogleSignInAuthentication', which is not a subtype of 'Future'. Try removing the 'await' or changing the expression. - await_only_futures
+   info - auth_service.dart:115:7 - Use 'rethrow' to rethrow a caught exception. Try replacing the 'throw' with a 'rethrow'. - use_rethrow_when_possible
+
+7 issues found.

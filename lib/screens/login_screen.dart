@@ -45,6 +45,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _handleGoogleSignIn() async {
+    setState(() => _isLoading = true);
+    try {
+      final credential = await AuthService.signInWithGoogle();
+      if (credential != null && mounted) {
+        // AuthGate will redirect automatically
+      }
+    } on FirebaseException catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   void _showError(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -188,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 32),
                     
                     OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: _isLoading ? null : _handleGoogleSignIn,
                       icon: const Icon(Icons.account_circle_outlined, size: 24),
                       label: const Text('Google Account', style: TextStyle(color: Colors.white, fontSize: 14)),
                       style: OutlinedButton.styleFrom(

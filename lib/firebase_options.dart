@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCRAwVJKwL3eXyzvTKSaMlZqdyHtDBxlSY',
-    appId: '1:808330890323:android:cd6bb57a4e9212c0724aa6',
+    appId: '1:808330890323:android:aa12fb668e8bc3cd724aa6',
     messagingSenderId: '808330890323',
     projectId: 'fitroute-app',
     storageBucket: 'fitroute-app.firebasestorage.app',

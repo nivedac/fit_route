@@ -4,7 +4,7 @@
       "android": {
         "default": {
           "projectId": "fitroute-app",
-          "appId": "1:808330890323:android:cd6bb57a4e9212c0724aa6",
+          "appId": "1:808330890323:android:aa12fb668e8bc3cd724aa6",
           "fileOutput": "android/app/google-services.json"
         }
       },
@@ -12,7 +12,7 @@
         "lib/firebase_options.dart": {
           "projectId": "fitroute-app",
           "configurations": {
-            "android": "1:808330890323:android:cd6bb57a4e9212c0724aa6"
+            "android": "1:808330890323:android:aa12fb668e8bc3cd724aa6"
           }
         }
       }
@@ -27,7 +27,11 @@
   "auth": {
     "providers": {
       "anonymous": false,
-      "emailPassword": true
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "FitRoute",
+        "supportEmail": "nived.n@hotmail.com"
+      }
     }
   }
 }
