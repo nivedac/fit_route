@@ -67,6 +67,29 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
+  Future<void> _handleGoogleSignIn() async {
+    setState(() => _isLoading = true);
+    try {
+      final credential = await AuthService.signInWithGoogle();
+      if (credential != null && mounted) {
+        // After successful registration/login, AuthGate handles standard navigation
+        // But for new users we might want to go to goal setup
+        // Note: AuthService.signInWithGoogle already handles Firestore doc creation
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/main',
+          (route) => false,
+        );
+      }
+    } on FirebaseException catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   void _showError(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -214,6 +237,29 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ],
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 48),
+                Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.white.withOpacity(0.05))),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text('OR CONTINUE WITH', style: TextStyle(fontSize: 10, color: Colors.grey, letterSpacing: 2)),
+                    ),
+                    Expanded(child: Divider(color: Colors.white.withOpacity(0.05))),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                OutlinedButton.icon(
+                  onPressed: _isLoading ? null : _handleGoogleSignIn,
+                  icon: const Icon(Icons.account_circle_outlined, size: 24),
+                  label: const Text('Google Account', style: TextStyle(color: Colors.white, fontSize: 14)),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 56),
+                    side: BorderSide(color: Colors.white.withOpacity(0.05)),
+                    backgroundColor: Colors.white.withOpacity(0.02),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
                 const SizedBox(height: 32),
