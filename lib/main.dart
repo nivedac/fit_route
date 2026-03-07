@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'providers/user_provider.dart';
 import 'theme.dart';
+import 'app/auth_gate.dart';
 import 'screens/splash_screen.dart';
 import 'screens/create_account_screen.dart';
 import 'screens/login_screen.dart';
@@ -25,7 +28,12 @@ import 'screens/workout_detail_screen.dart';
 import 'screens/meal_detail_screen.dart';
 import 'screens/active_workout_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     MultiProvider(
       providers: [
@@ -77,6 +85,7 @@ class FitRouteApp extends StatelessWidget {
       },
       routes: {
         '/': (context) => const SplashScreen(),
+        '/auth-gate': (context) => const AuthGate(),
         '/create-account': (context) => const CreateAccountScreen(),
         '/login': (context) => const LoginScreen(),
         '/goal-setup': (context) => const GoalSetupScreen(),

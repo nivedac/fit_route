@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme.dart';
 import '../providers/user_provider.dart';
+import '../services/auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -41,16 +42,13 @@ class ProfileScreen extends StatelessWidget {
                   height: 112,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppTheme.charcoal,
+                    color: AppTheme.sunsetOrange.withOpacity(0.15),
                     boxShadow: [
                       BoxShadow(color: AppTheme.sunsetOrange.withOpacity(0.2), blurRadius: 15, spreadRadius: 0),
                     ],
                     border: Border.all(color: AppTheme.sunsetOrange, width: 2),
-                    image: const DecorationImage(
-                      image: NetworkImage('https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&q=80'),
-                      fit: BoxFit.cover,
-                    ),
                   ),
+                  child: const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 48),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/edit-profile'),
@@ -119,9 +117,11 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.logout,
               title: 'Logout',
               subtitle: '',
-              onTap: () {
-                // Return to login screen
-                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+              onTap: () async {
+                await AuthService.logoutUser();
+                if (context.mounted) {
+                  Navigator.pushNamedAndRemoveUntil(context, '/auth-gate', (route) => false);
+                }
               },
             ),
             const SizedBox(height: 48),

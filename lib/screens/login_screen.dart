@@ -1,8 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../theme.dart';
+import '../services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showError('Please enter both email and password.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await AuthService.loginUser(email: email, password: password);
+      // AuthGate will handle navigation automatically
+    } on FirebaseException catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +128,7 @@ class LoginScreen extends StatelessWidget {
                       label: 'Email Address',
                       hint: 'name@email.com',
                       icon: Icons.mail_outline,
+                      controller: _emailController,
                     ),
                     const SizedBox(height: 20),
                     _InputBox(
@@ -82,6 +136,7 @@ class LoginScreen extends StatelessWidget {
                       hint: '••••••••',
                       icon: Icons.lock_outline,
                       isPassword: true,
+                      controller: _passwordController,
                     ),
                     
                     Align(
@@ -95,7 +150,7 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     
                     ElevatedButton(
-                      onPressed: () => Navigator.pushNamed(context, '/goal-setup'),
+                      onPressed: _isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.sunsetOrange,
                         foregroundColor: Colors.white,
@@ -103,8 +158,18 @@ class LoginScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         elevation: 8,
                         shadowColor: AppTheme.sunsetOrange.withOpacity(0.4),
+                        disabledBackgroundColor: AppTheme.sunsetOrange.withOpacity(0.5),
                       ),
-                      child: const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                     
                     const SizedBox(height: 32),
@@ -169,12 +234,14 @@ class _InputBox extends StatelessWidget {
   final String hint;
   final IconData icon;
   final bool isPassword;
+  final TextEditingController? controller;
 
   const _InputBox({
     required this.label,
     required this.hint,
     required this.icon,
     this.isPassword = false,
+    this.controller,
   });
 
   @override
@@ -197,6 +264,7 @@ class _InputBox extends StatelessWidget {
               children: [
                 Text(label.toUpperCase(), style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.3), letterSpacing: 1.5, fontWeight: FontWeight.bold)),
                 TextField(
+                  controller: controller,
                   obscureText: isPassword,
                   style: const TextStyle(fontSize: 16, color: Colors.white),
                   decoration: InputDecoration(

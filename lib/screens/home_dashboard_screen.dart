@@ -35,12 +35,10 @@ class HomeDashboardScreen extends StatelessWidget {
                     height: 48,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
+                      color: AppTheme.sunsetOrange.withOpacity(0.15),
                       border: Border.all(color: AppTheme.sunsetOrange.withOpacity(0.3), width: 2),
-                      image: const DecorationImage(
-                        image: NetworkImage('https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&q=80'),
-                        fit: BoxFit.cover,
-                      ),
                     ),
+                    child: const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 24),
                   ),
                 ],
               ),

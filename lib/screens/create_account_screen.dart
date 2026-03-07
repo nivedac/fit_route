@@ -1,8 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../theme.dart';
+import '../services/auth_service.dart';
 
-class CreateAccountScreen extends StatelessWidget {
+class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
+
+  @override
+  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _agreedToTerms = true;
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      _showError('Please fill in all fields.');
+      return;
+    }
+
+    if (!_agreedToTerms) {
+      _showError('Please agree to the Terms and Privacy Policy.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await AuthService.registerUser(
+        name: name,
+        email: email,
+        password: password,
+      );
+      // After successful registration, user is automatically signed in.
+      // AuthGate will handle navigation to MainScreen.
+      if (mounted) {
+        // Navigate to goal setup for first-time users
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/goal-setup',
+          (route) => false,
+        );
+      }
+    } on FirebaseException catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } catch (e) {
+      _showError(AuthService.getErrorMessage(e));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +112,33 @@ class CreateAccountScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 48),
-                const _M3TextField(label: 'Full Name', placeholder: 'Full Name'),
+                _M3TextField(
+                  label: 'Full Name',
+                  placeholder: 'Full Name',
+                  controller: _nameController,
+                ),
                 const SizedBox(height: 24),
-                const _M3TextField(label: 'Email Address', placeholder: 'Email Address'),
+                _M3TextField(
+                  label: 'Email Address',
+                  placeholder: 'Email Address',
+                  controller: _emailController,
+                ),
                 const SizedBox(height: 24),
-                const _M3TextField(
+                _M3TextField(
                   label: 'Create Password',
                   placeholder: 'Password',
                   isPassword: true,
+                  controller: _passwordController,
                 ),
                 const SizedBox(height: 32),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Checkbox(
-                      value: true,
-                      onChanged: (val) {},
+                      value: _agreedToTerms,
+                      onChanged: (val) {
+                        setState(() => _agreedToTerms = val ?? false);
+                      },
                       activeColor: AppTheme.sunsetOrange,
                       side: BorderSide(color: Colors.white.withOpacity(0.4)),
                     ),
@@ -93,14 +179,24 @@ class CreateAccountScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 48),
                 ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/login'),
+                  onPressed: _isLoading ? null : _handleRegister,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.sunsetOrange,
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 56),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                    disabledBackgroundColor: AppTheme.sunsetOrange.withOpacity(0.5),
                   ),
-                  child: const Text('Register', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : const Text('Register', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
                 const SizedBox(height: 24),
                 Center(
@@ -134,11 +230,13 @@ class _M3TextField extends StatelessWidget {
   final String label;
   final String placeholder;
   final bool isPassword;
+  final TextEditingController? controller;
 
   const _M3TextField({
     required this.label,
     required this.placeholder,
     this.isPassword = false,
+    this.controller,
   });
 
   @override
@@ -151,6 +249,7 @@ class _M3TextField extends StatelessWidget {
           style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 14),
         ),
         TextField(
+          controller: controller,
           obscureText: isPassword,
           decoration: InputDecoration(
             hintText: placeholder,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "808330890323",
+    "project_id": "fitroute-app",
+    "storage_bucket": "fitroute-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808330890323:android:cd6bb57a4e9212c0724aa6",
+        "android_client_info": {
+          "package_name": "com.example.fit_route"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRAwVJKwL3eXyzvTKSaMlZqdyHtDBxlSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
