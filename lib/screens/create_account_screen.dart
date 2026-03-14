@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
 import '../services/auth_service.dart';
+import '../providers/user_provider.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -48,9 +50,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         email: email,
         password: password,
       );
-      // After successful registration, user is automatically signed in.
-      // AuthGate will handle navigation to MainScreen.
+      // After successful registration, save to UserProvider
       if (mounted) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.updateAccount(name, email);
         // Navigate to goal setup for first-time users
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -272,7 +275,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 }
 
-class _M3TextField extends StatelessWidget {
+class _M3TextField extends StatefulWidget {
   final String label;
   final String placeholder;
   final bool isPassword;
@@ -286,19 +289,26 @@ class _M3TextField extends StatelessWidget {
   });
 
   @override
+  State<_M3TextField> createState() => _M3TextFieldState();
+}
+
+class _M3TextFieldState extends State<_M3TextField> {
+  bool _isPasswordVisible = false;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          widget.label,
           style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 14),
         ),
         TextField(
-          controller: controller,
-          obscureText: isPassword,
+          controller: widget.controller,
+          obscureText: widget.isPassword && !_isPasswordVisible,
           decoration: InputDecoration(
-            hintText: placeholder,
+            hintText: widget.placeholder,
             hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
@@ -306,8 +316,14 @@ class _M3TextField extends StatelessWidget {
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white),
             ),
-            suffixIcon: isPassword
-                ? Icon(Icons.visibility, color: Colors.white.withOpacity(0.4))
+            suffixIcon: widget.isPassword
+                ? GestureDetector(
+                    onTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                    child: Icon(
+                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.white.withOpacity(0.4),
+                    ),
+                  )
                 : null,
           ),
         ),

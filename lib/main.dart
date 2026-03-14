@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase_options.dart';
 import 'providers/user_provider.dart';
 import 'theme.dart';
@@ -27,12 +28,24 @@ import 'screens/main_screen.dart';
 import 'screens/workout_detail_screen.dart';
 import 'screens/meal_detail_screen.dart';
 import 'screens/active_workout_screen.dart';
+import 'screens/log_weight_screen.dart';
+import 'screens/log_meal_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize local notifications globally
+  const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const settings = InitializationSettings(android: androidSettings);
+  await flutterLocalNotificationsPlugin.initialize(settings);
+
+  // Request notification permission on Android 13+
+  final androidPlugin = flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+  await androidPlugin?.requestNotificationsPermission();
 
   runApp(
     MultiProvider(
@@ -75,9 +88,10 @@ class FitRouteApp extends StatelessWidget {
               ),
             );
           case '/main':
+            final tabIndex = settings.arguments as int? ?? 0;
             return MaterialPageRoute(
               settings: settings,
-              builder: (_) => const MainScreen(),
+              builder: (_) => MainScreen(initialTab: tabIndex),
             );
           default:
             return null; // Fallback to routes map
@@ -105,6 +119,8 @@ class FitRouteApp extends StatelessWidget {
         '/notifications': (context) => const NotificationsScreen(),
         '/privacy-security': (context) => const PrivacySecurityScreen(),
         '/active-workout': (context) => const ActiveWorkoutScreen(),
+        '/log-weight': (context) => const LogWeightScreen(),
+        '/log-meal': (context) => const LogMealScreen(),
       },
     );
   }

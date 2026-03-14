@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
+import '../providers/user_provider.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
@@ -11,46 +13,101 @@ class ProgressScreen extends StatefulWidget {
 class _ProgressScreenState extends State<ProgressScreen> {
   String _selectedFilter = '1M';
 
-  // Mock data for different time ranges
-  final Map<String, Map<String, dynamic>> _filterData = {
-    '1W': {
-      'points': [77.2, 77.0, 76.8, 76.9, 76.6, 76.5, 76.4],
-      'labels': ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
-      'change': '-0.8 kg this week',
-      'current': '76.4',
-    },
-    '1M': {
-      'points': [78.5, 78.2, 77.8, 77.5, 77.9, 77.2, 76.8, 76.4],
-      'labels': ['SEP 15', 'SEP 20', 'SEP 25', 'SEP 30', 'OCT 05', 'OCT 10', 'OCT 12', 'OCT 15'],
-      'change': '-2.1 kg this month',
-      'current': '76.4',
-    },
-    '3M': {
-      'points': [82.0, 81.2, 80.5, 79.8, 79.0, 78.5, 77.8, 77.0, 76.4],
-      'labels': ['JUL', 'JUL', 'AUG', 'AUG', 'SEP', 'SEP', 'OCT', 'OCT', 'OCT'],
-      'change': '-5.6 kg in 3 months',
-      'current': '76.4',
-    },
-    '1Y': {
-      'points': [90.0, 88.5, 86.0, 84.5, 83.0, 81.5, 80.0, 78.5, 77.0, 76.4],
-      'labels': ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT'],
-      'change': '-13.6 kg this year',
-      'current': '76.4',
-    },
-    'All': {
-      'points': [95.0, 92.0, 90.0, 88.0, 86.0, 84.0, 82.0, 80.0, 78.0, 76.4],
-      'labels': ['2024', '', '2024', '', '2025', '', '2025', '', '2025', 'NOW'],
-      'change': '-18.6 kg total',
-      'current': '76.4',
-    },
-  };
+  List<double> _getFilteredPoints(UserProvider provider) {
+    final logs = provider.weightLogs;
+    if (logs.isEmpty) {
+      // Return mock data if no real data exists
+      return _getMockPoints();
+    }
+
+    final now = DateTime.now();
+    Duration duration;
+    switch (_selectedFilter) {
+      case '1W':
+        duration = const Duration(days: 7);
+        break;
+      case '1M':
+        duration = const Duration(days: 30);
+        break;
+      case '3M':
+        duration = const Duration(days: 90);
+        break;
+      case '1Y':
+        duration = const Duration(days: 365);
+        break;
+      case 'All':
+      default:
+        duration = const Duration(days: 3650);
+        break;
+    }
+
+    final cutoff = now.subtract(duration);
+    final filtered = logs.where((log) {
+      final date = DateTime.tryParse(log['date'] ?? '');
+      return date != null && date.isAfter(cutoff);
+    }).toList();
+
+    if (filtered.isEmpty) return _getMockPoints();
+
+    return filtered.reversed.map<double>((e) => (e['weight'] as num).toDouble()).toList();
+  }
+
+  List<double> _getMockPoints() {
+    final mockData = {
+      '1W': [77.2, 77.0, 76.8, 76.9, 76.6, 76.5, 76.4],
+      '1M': [78.5, 78.2, 77.8, 77.5, 77.9, 77.2, 76.8, 76.4],
+      '3M': [82.0, 81.2, 80.5, 79.8, 79.0, 78.5, 77.8, 77.0, 76.4],
+      '1Y': [90.0, 88.5, 86.0, 84.5, 83.0, 81.5, 80.0, 78.5, 77.0, 76.4],
+      'All': [95.0, 92.0, 90.0, 88.0, 86.0, 84.0, 82.0, 80.0, 78.0, 76.4],
+    };
+    return mockData[_selectedFilter] ?? [76.4];
+  }
+
+  String _getChangeText(List<double> points) {
+    if (points.length < 2) return 'No change';
+    final diff = points.last - points.first;
+    final sign = diff <= 0 ? '' : '+';
+    switch (_selectedFilter) {
+      case '1W':
+        return '$sign${diff.toStringAsFixed(1)} kg this week';
+      case '1M':
+        return '$sign${diff.toStringAsFixed(1)} kg this month';
+      case '3M':
+        return '$sign${diff.toStringAsFixed(1)} kg in 3 months';
+      case '1Y':
+        return '$sign${diff.toStringAsFixed(1)} kg this year';
+      case 'All':
+        return '$sign${diff.toStringAsFixed(1)} kg total';
+      default:
+        return '$sign${diff.toStringAsFixed(1)} kg';
+    }
+  }
+
+  List<String> _getLabels(List<double> points) {
+    final mockLabels = {
+      '1W': ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+      '1M': ['W1', 'W1', 'W2', 'W2', 'W3', 'W3', 'W4', 'W4'],
+      '3M': ['M1', 'M1', 'M1', 'M2', 'M2', 'M2', 'M3', 'M3', 'NOW'],
+      '1Y': ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'NOW'],
+      'All': ['START', '', '', '', '', '', '', '', '', 'NOW'],
+    };
+    return mockLabels[_selectedFilter] ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
-    final data = _filterData[_selectedFilter]!;
-    final points = data['points'] as List<double>;
-    final labels = data['labels'] as List<String>;
-    final change = data['change'] as String;
+    final provider = Provider.of<UserProvider>(context);
+    final points = _getFilteredPoints(provider);
+    final change = _getChangeText(points);
+    final labels = _getLabels(points);
+    final currentWeight = provider.weightLogs.isNotEmpty
+        ? (provider.weightLogs.first['weight'] as num).toDouble()
+        : provider.currentWeight;
+    final targetWeight = provider.targetWeight;
+    final remaining = currentWeight - targetWeight;
+
+    // Build recent weight log entries
+    final recentLogs = provider.weightLogs.take(5).toList();
 
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
@@ -93,16 +150,20 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
-                          children: const [
-                            Text('76.4', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                            SizedBox(width: 4),
-                            Text('kg', style: TextStyle(fontSize: 14, color: AppTheme.sunsetOrange, fontWeight: FontWeight.w600)),
+                          children: [
+                            Text(currentWeight.toStringAsFixed(1), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 4),
+                            const Text('kg', style: TextStyle(fontSize: 14, color: AppTheme.sunsetOrange, fontWeight: FontWeight.w600)),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Icon(Icons.trending_down, color: Colors.greenAccent, size: 14),
+                            Icon(
+                              remaining > 0 ? Icons.trending_down : Icons.trending_up,
+                              color: Colors.greenAccent,
+                              size: 14,
+                            ),
                             const SizedBox(width: 4),
                             Flexible(
                               child: Text(change, style: const TextStyle(color: Colors.greenAccent, fontSize: 12), overflow: TextOverflow.ellipsis),
@@ -130,18 +191,23 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
-                          children: const [
-                            Text('72.0', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                            SizedBox(width: 4),
-                            Text('kg', style: TextStyle(fontSize: 14, color: AppTheme.sunsetOrange, fontWeight: FontWeight.w600)),
+                          children: [
+                            Text(targetWeight.toStringAsFixed(1), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 4),
+                            const Text('kg', style: TextStyle(fontSize: 14, color: AppTheme.sunsetOrange, fontWeight: FontWeight.w600)),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Row(
-                          children: const [
-                            Icon(Icons.flag, color: Colors.white30, size: 14),
-                            SizedBox(width: 4),
-                            Text('4.4 kg to go', style: TextStyle(color: Colors.white30, fontSize: 12)),
+                          children: [
+                            const Icon(Icons.flag, color: Colors.white30, size: 14),
+                            const SizedBox(width: 4),
+                            Text(
+                              remaining > 0
+                                  ? '${remaining.toStringAsFixed(1)} kg to go'
+                                  : 'Goal reached! 🎉',
+                              style: const TextStyle(color: Colors.white30, fontSize: 12),
+                            ),
                           ],
                         ),
                       ],
@@ -152,7 +218,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             const SizedBox(height: 32),
 
-            // Time Filters — now functional
+            // Time Filters — functional
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: ['1W', '1M', '3M', '1Y', 'All'].map((filter) {
@@ -201,17 +267,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
               child: Stack(
                 children: [
-                  // Horizontal grid lines
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(5, (index) => const Divider(color: Colors.white10)),
                   ),
-                  // Dynamic chart line
                   CustomPaint(
                     size: const Size(double.infinity, 250),
                     painter: _DynamicChartPainter(points: points),
                   ),
-                  // Tooltip at last point
                   Positioned(
                     right: 20,
                     top: 60,
@@ -225,8 +288,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       ),
                       child: Column(
                         children: [
-                          Text('${points.last} kg', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                          Text(labels.last, style: const TextStyle(fontSize: 8, color: Colors.white54, fontWeight: FontWeight.bold)),
+                          Text('${points.last.toStringAsFixed(1)} kg', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                          if (labels.isNotEmpty)
+                            Text(labels.last, style: const TextStyle(fontSize: 8, color: Colors.white54, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -235,7 +299,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
             ),
             
-            // X-axis labels — dynamic
+            // X-axis labels
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,19 +314,57 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             const SizedBox(height: 40),
 
-            // Daily Logs
-            const Text('Daily Logs', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            // Daily Logs — real data
+            const Text('Recent Weight Logs', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
-            
-            _LogItem(icon: Icons.scale, title: 'Today, 08:30 AM', subtitle: 'Logged manually', value: '76.4 kg', iconColor: AppTheme.sunsetOrange),
-            const SizedBox(height: 12),
-            _LogItem(icon: Icons.scale, title: 'Yesterday, 07:45 AM', subtitle: 'From Smart Scale', value: '76.9 kg', opacity: 0.7),
-            
+
+            if (recentLogs.isEmpty)
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppTheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Center(
+                  child: Text('No weight logs yet. Start by logging your weight in the Tracker!',
+                      style: TextStyle(color: Colors.white54), textAlign: TextAlign.center),
+                ),
+              )
+            else
+              ...recentLogs.asMap().entries.map((entry) {
+                final log = entry.value;
+                final weight = (log['weight'] as num).toDouble();
+                final date = DateTime.tryParse(log['date'] ?? '') ?? DateTime.now();
+                final isToday = date.day == DateTime.now().day &&
+                    date.month == DateTime.now().month &&
+                    date.year == DateTime.now().year;
+                final dateStr = isToday
+                    ? 'Today'
+                    : '${_monthName(date.month)} ${date.day}';
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _LogItem(
+                    icon: Icons.scale,
+                    title: dateStr,
+                    subtitle: 'Logged manually',
+                    value: '${weight.toStringAsFixed(1)} kg',
+                    iconColor: AppTheme.sunsetOrange,
+                    opacity: entry.key == 0 ? 1.0 : 0.7,
+                  ),
+                );
+              }),
+
             const SizedBox(height: 80),
           ],
         ),
       ),
     );
+  }
+
+  String _monthName(int month) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month - 1];
   }
 }
 
@@ -336,7 +438,6 @@ class _DynamicChartPainter extends CustomPainter {
     final minVal = points.reduce((a, b) => a < b ? a : b);
     final range = maxVal - minVal == 0 ? 1.0 : maxVal - minVal;
 
-    // Create normalized points
     final chartPoints = <Offset>[];
     for (int i = 0; i < points.length; i++) {
       final x = i / (points.length - 1) * size.width;
@@ -344,7 +445,6 @@ class _DynamicChartPainter extends CustomPainter {
       chartPoints.add(Offset(x, y));
     }
 
-    // Draw gradient fill
     if (chartPoints.length >= 2) {
       final fillPath = Path();
       fillPath.moveTo(chartPoints.first.dx, size.height);
@@ -370,7 +470,6 @@ class _DynamicChartPainter extends CustomPainter {
       canvas.drawPath(fillPath, fillPaint);
     }
 
-    // Draw line
     final linePaint = Paint()
       ..color = const Color(0xFFFF4D00)
       ..style = PaintingStyle.stroke
@@ -387,7 +486,6 @@ class _DynamicChartPainter extends CustomPainter {
     }
     canvas.drawPath(linePath, linePaint);
 
-    // Draw glow on last point
     final lastPoint = chartPoints.last;
     final glowPaint = Paint()
       ..color = const Color(0xFFFF4D00).withOpacity(0.2)

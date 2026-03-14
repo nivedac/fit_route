@@ -238,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class _InputBox extends StatelessWidget {
+class _InputBox extends StatefulWidget {
   final String label;
   final String hint;
   final IconData icon;
@@ -254,6 +254,13 @@ class _InputBox extends StatelessWidget {
   });
 
   @override
+  State<_InputBox> createState() => _InputBoxState();
+}
+
+class _InputBoxState extends State<_InputBox> {
+  bool _isPasswordVisible = false;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -264,20 +271,20 @@ class _InputBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white.withOpacity(0.3), size: 20),
+          Icon(widget.icon, color: Colors.white.withOpacity(0.3), size: 20),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(label.toUpperCase(), style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.3), letterSpacing: 1.5, fontWeight: FontWeight.bold)),
+                Text(widget.label.toUpperCase(), style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.3), letterSpacing: 1.5, fontWeight: FontWeight.bold)),
                 TextField(
-                  controller: controller,
-                  obscureText: isPassword,
+                  controller: widget.controller,
+                  obscureText: widget.isPassword && !_isPasswordVisible,
                   style: const TextStyle(fontSize: 16, color: Colors.white),
                   decoration: InputDecoration(
-                    hintText: hint,
+                    hintText: widget.hint,
                     hintStyle: TextStyle(color: Colors.white.withOpacity(0.1)),
                     border: InputBorder.none,
                     isDense: true,
@@ -287,8 +294,15 @@ class _InputBox extends StatelessWidget {
               ],
             ),
           ),
-          if (isPassword)
-            Icon(Icons.visibility_off, color: Colors.white.withOpacity(0.3), size: 20),
+          if (widget.isPassword)
+            GestureDetector(
+              onTap: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+              child: Icon(
+                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Colors.white.withOpacity(0.3),
+                size: 20,
+              ),
+            ),
         ],
       ),
     );

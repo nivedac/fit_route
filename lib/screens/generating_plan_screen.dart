@@ -13,12 +13,12 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
   @override
   void initState() {
     super.initState();
-    _checkProgress();
+    _waitForGeneration();
   }
 
-  void _checkProgress() async {
+  void _waitForGeneration() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    // Wait for the simulated generation if not already finished
+    // Wait for the AI generation to finish
     while (userProvider.isGenerating) {
       await Future.delayed(const Duration(milliseconds: 500));
     }
@@ -32,6 +32,7 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final progress = userProvider.generationProgress;
+    final status = userProvider.generationStatus;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -76,7 +77,7 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
                             '${(progress * 100).toInt()}%',
                             style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                           ),
-                          const Text('CALCULATING', style: TextStyle(fontSize: 8, letterSpacing: 2, color: Colors.grey)),
+                          const Text('AI ENGINE', style: TextStyle(fontSize: 8, letterSpacing: 2, color: Colors.grey)),
                         ],
                       ),
                     ],
@@ -90,24 +91,47 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Our intelligence engine is processing your biological\nparameters for optimal accuracy.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 13, height: 1.5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    status.isNotEmpty ? status : 'Our AI engine is analyzing your profile\nfor optimal results.',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5),
+                  ),
                 ),
                 
                 const SizedBox(height: 48),
                 
                 // Status Steps
-                _StatusRow(label: 'Analyzing profile metrics', isDone: progress > 0.3),
-                _StatusRow(label: 'Customizing equipment loadout', isDone: progress > 0.6),
-                _StatusRow(label: 'Calibrating caloric thresholds', isDone: progress > 0.8),
+                _StatusRow(label: 'Analyzing profile metrics', isDone: progress > 0.25),
+                _StatusRow(label: 'AI generating workout plan', isDone: progress > 0.5),
+                _StatusRow(label: 'AI generating diet plan', isDone: progress > 0.7),
+                _StatusRow(label: 'Calibrating caloric thresholds', isDone: progress > 0.9),
                 
                 const Spacer(),
                 
-                const Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: Text('VERSION 4.2.0 - ALPHA STABLE', style: TextStyle(fontSize: 8, letterSpacing: 3, fontWeight: FontWeight.bold, color: Colors.white24)),
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD0BCFF).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.auto_awesome, size: 14, color: Color(0xFFD0BCFF)),
+                            SizedBox(width: 6),
+                            Text('POWERED BY AI', style: TextStyle(fontSize: 10, letterSpacing: 2, fontWeight: FontWeight.bold, color: Color(0xFFD0BCFF))),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

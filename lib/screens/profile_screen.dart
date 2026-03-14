@@ -10,8 +10,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'Alex Johnson';
-    final displayEmail = userProvider.email.isNotEmpty ? userProvider.email : 'alex.johnson@fitroute.ai';
+    final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'User';
+    final displayEmail = userProvider.email.isNotEmpty ? userProvider.email : 'user@fitroute.app';
+    final photoUrl = userProvider.profilePhotoUrl;
 
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
@@ -48,7 +49,18 @@ class ProfileScreen extends StatelessWidget {
                     ],
                     border: Border.all(color: AppTheme.sunsetOrange, width: 2),
                   ),
-                  child: const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 48),
+                  child: ClipOval(
+                    child: photoUrl.isNotEmpty
+                        ? Image.network(
+                            photoUrl,
+                            width: 112,
+                            height: 112,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 48),
+                          )
+                        : const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 48),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/edit-profile'),
@@ -70,14 +82,14 @@ class ProfileScreen extends StatelessWidget {
             Text(displayEmail, style: const TextStyle(fontSize: 14, color: Colors.white54)),
             const SizedBox(height: 40),
 
-            // Stats
+            // Stats — from real data
             Row(
               children: [
-                Expanded(child: _StatCard(value: '72', unit: 'kg')),
+                Expanded(child: _StatCard(value: userProvider.currentWeight.toStringAsFixed(0), unit: 'kg')),
                 const SizedBox(width: 16),
-                Expanded(child: _StatCard(value: '182', unit: 'cm')),
+                Expanded(child: _StatCard(value: userProvider.height.toStringAsFixed(0), unit: 'cm')),
                 const SizedBox(width: 16),
-                Expanded(child: _StatCard(value: '24', unit: 'yrs')),
+                Expanded(child: _StatCard(value: userProvider.age.toString(), unit: 'yrs')),
               ],
             ),
             const SizedBox(height: 40),
@@ -128,7 +140,7 @@ class ProfileScreen extends StatelessWidget {
 
             // Version
             const Text('VERSION 2.4.0', style: TextStyle(fontSize: 10, color: Colors.white24, fontWeight: FontWeight.bold, letterSpacing: 4)),
-            const SizedBox(height: 100), // Bottom nav padding
+            const SizedBox(height: 100),
           ],
         ),
       ),

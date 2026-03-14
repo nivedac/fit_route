@@ -6,14 +6,15 @@ import 'tracker_screen.dart';
 import 'profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int initialTab;
+  const MainScreen({super.key, this.initialTab = 0});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
   final List<Widget> _screens = const [
     HomeDashboardScreen(),
@@ -21,6 +22,12 @@ class _MainScreenState extends State<MainScreen> {
     TrackerScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialTab;
+  }
 
   @override
   void didChangeDependencies() {
@@ -165,7 +172,7 @@ class _MainScreenState extends State<MainScreen> {
               color: AppTheme.accentCyan,
               onTap: () {
                 Navigator.pop(ctx);
-                setState(() => _currentIndex = 2); // Go to tracker
+                Navigator.pushNamed(context, '/log-weight');
               },
             ),
             const SizedBox(height: 12),
@@ -176,7 +183,7 @@ class _MainScreenState extends State<MainScreen> {
               color: AppTheme.accentEmerald,
               onTap: () {
                 Navigator.pop(ctx);
-                setState(() => _currentIndex = 2); // Go to tracker
+                Navigator.pushNamed(context, '/log-meal');
               },
             ),
             const SizedBox(height: 16),

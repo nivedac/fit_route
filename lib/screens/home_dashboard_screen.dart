@@ -9,7 +9,8 @@ class HomeDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'Alex Johnson';
+    final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'User';
+    final photoUrl = userProvider.profilePhotoUrl;
 
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
@@ -38,7 +39,18 @@ class HomeDashboardScreen extends StatelessWidget {
                       color: AppTheme.sunsetOrange.withOpacity(0.15),
                       border: Border.all(color: AppTheme.sunsetOrange.withOpacity(0.3), width: 2),
                     ),
-                    child: const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 24),
+                    child: ClipOval(
+                      child: photoUrl.isNotEmpty
+                          ? Image.network(
+                              photoUrl,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 24),
+                            )
+                          : const Icon(Icons.person, color: AppTheme.sunsetOrange, size: 24),
+                    ),
                   ),
                 ],
               ),
