@@ -43,8 +43,12 @@ class _TrackerScreenState extends State<TrackerScreen> {
     final progress = totalCount > 0 ? completedCount / totalCount : 0.0;
     final streak = userProvider.getCurrentStreak();
 
-    // Calculate the start of the 30-day cycle (from 30 days ago)
-    final cycleStart = DateTime.now().subtract(const Duration(days: 29));
+    final now = DateTime.now();
+    final todayMidnight = DateTime(now.year, now.month, now.day);
+
+    // Calculate the start of the goal cycle
+    final planStart = userProvider.planStartDate ?? todayMidnight;
+    final goalDays = userProvider.goalDurationDays;
 
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
@@ -271,6 +275,13 @@ class _TrackerScreenState extends State<TrackerScreen> {
               isChecked: checklist['steps'] ?? false,
               onTap: () => userProvider.toggleChecklistItem(currentKey, 'steps'),
             ),
+            const SizedBox(height: 8),
+            _ChecklistItem(
+              icon: Icons.scale,
+              label: 'Logged weight',
+              isChecked: checklist['weight'] ?? false,
+              onTap: () => userProvider.toggleChecklistItem(currentKey, 'weight'),
+            ),
             const SizedBox(height: 24),
 
             // Progress bar
@@ -297,17 +308,12 @@ class _TrackerScreenState extends State<TrackerScreen> {
             ),
             const SizedBox(height: 32),
 
-            // 30-Day Calendar Grid
+            // Calendar Grid
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: const [
-                    Icon(Icons.calendar_month, color: AppTheme.sunsetOrange),
-                    SizedBox(width: 8),
-                    Text('30 Day Overview', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  ],
-                ),
+                const Icon(Icons.calendar_month, color: AppTheme.sunsetOrange),
+                const SizedBox(width: 8),
+                Text('$goalDays Day Overview', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 16),
@@ -320,16 +326,17 @@ class _TrackerScreenState extends State<TrackerScreen> {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
               ),
-              itemCount: 30,
+              itemCount: goalDays,
               itemBuilder: (context, index) {
-                final day = cycleStart.add(Duration(days: index));
+                final day = planStart.add(Duration(days: index));
                 final dayKey = _dateKey(day);
                 final dayChecklist = userProvider.getChecklistForDate(dayKey);
                 final allDone = dayChecklist.values.every((v) => v);
                 final anyDone = dayChecklist.values.any((v) => v);
                 final isToday = _isToday(day);
                 final isSelected = dayKey == currentKey;
-                final isFuture = day.isAfter(DateTime.now());
+                final isFuture = day.isAfter(todayMidnight);
+                final isPassed = day.isBefore(todayMidnight) && !isToday;
 
                 return GestureDetector(
                   onTap: isFuture ? null : () {
@@ -365,8 +372,8 @@ class _TrackerScreenState extends State<TrackerScreen> {
                         else if (anyDone && !isFuture)
                           const Icon(Icons.radio_button_checked, color: AppTheme.sunsetOrange, size: 24)
                         else if (isFuture)
-                          Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.white10, shape: BoxShape.circle))
-                        else if (!isFuture && !anyDone)
+                          const Icon(Icons.lock_outline, color: Colors.white10, size: 20)
+                        else if (isPassed && !anyDone)
                           const Icon(Icons.close, color: Colors.white24, size: 24)
                         else
                           Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.white10, shape: BoxShape.circle)),

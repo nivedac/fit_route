@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
+import '../providers/user_provider.dart';
 
 class ActiveWorkoutScreen extends StatefulWidget {
   const ActiveWorkoutScreen({super.key});
@@ -19,19 +21,50 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
   Timer? _timer;
   Timer? _restTimer;
 
-  final List<Map<String, dynamic>> _exercises = [
-    {'name': 'Bench Press', 'sets': 4, 'reps': '12 reps', 'weight': '60 kg', 'icon': Icons.fitness_center, 'completed': false},
-    {'name': 'Incline Dumbbell Press', 'sets': 3, 'reps': '10 reps', 'weight': '22 kg', 'icon': Icons.fitness_center, 'completed': false},
-    {'name': 'Cable Flyes', 'sets': 3, 'reps': '15 reps', 'weight': '14 kg', 'icon': Icons.cable, 'completed': false},
-    {'name': 'Overhead Press', 'sets': 4, 'reps': '10 reps', 'weight': '40 kg', 'icon': Icons.fitness_center, 'completed': false},
-    {'name': 'Lateral Raises', 'sets': 3, 'reps': '15 reps', 'weight': '10 kg', 'icon': Icons.accessibility_new, 'completed': false},
-    {'name': 'Tricep Pushdowns', 'sets': 3, 'reps': '12 reps', 'weight': '20 kg', 'icon': Icons.fitness_center, 'completed': false},
-  ];
+  late List<Map<String, dynamic>> _exercises;
 
   @override
   void initState() {
     super.initState();
+    _loadExercises();
     _startTimer();
+  }
+
+  void _loadExercises() {
+    final provider = Provider.of<UserProvider>(context, listen: false);
+    final aiPlan = provider.aiPlanData;
+    
+    // Default fallback exercises if no plan generated
+    List<Map<String, dynamic>> fallback = [
+      {'name': 'Bench Press', 'sets': 4, 'reps': '12 reps', 'weight': '60 kg', 'icon': Icons.fitness_center, 'completed': false},
+      {'name': 'Incline Dumbbell Press', 'sets': 3, 'reps': '10 reps', 'weight': '22 kg', 'icon': Icons.fitness_center, 'completed': false},
+      {'name': 'Cable Flyes', 'sets': 3, 'reps': '15 reps', 'weight': '14 kg', 'icon': Icons.cable, 'completed': false},
+      {'name': 'Overhead Press', 'sets': 4, 'reps': '10 reps', 'weight': '40 kg', 'icon': Icons.fitness_center, 'completed': false},
+    ];
+
+    if (aiPlan == null) {
+      _exercises = fallback;
+      return;
+    }
+
+    try {
+      final schedule = aiPlan['workout']['weeklySchedule'] as List;
+      // Find a day with exercises
+      final dayObj = schedule.firstWhere((day) => (day['exercises'] as List).isNotEmpty, orElse: () => schedule.first);
+      final rawExercises = dayObj['exercises'] as List;
+      _exercises = rawExercises.map((e) => {
+        'name': e['name'],
+        'sets': e['sets'] is int ? e['sets'] : int.tryParse(e['sets'].toString()) ?? 3,
+        'reps': e['reps'].toString(),
+        'weight': 'Bodyweight / Custom',
+        'icon': Icons.fitness_center,
+        'completed': false,
+      }).toList();
+      
+      if (_exercises.isEmpty) _exercises = fallback;
+    } catch (e) {
+      _exercises = fallback;
+    }
   }
 
   @override
@@ -99,6 +132,15 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
 
   void _showCompletionDialog() {
     _timer?.cancel();
+
+    // Mark workout as done in User Provider
+    final provider = Provider.of<UserProvider>(context, listen: false);
+    final now = DateTime.now();
+    final dateKey = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    if (!(provider.getChecklistForDate(dateKey)['workout'] ?? false)) {
+      provider.toggleChecklistItem(dateKey, 'workout');
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,

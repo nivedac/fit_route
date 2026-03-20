@@ -77,7 +77,7 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
                             '${(progress * 100).toInt()}%',
                             style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                           ),
-                          const Text('AI ENGINE', style: TextStyle(fontSize: 8, letterSpacing: 2, color: Colors.grey)),
+                          const Text('GEMINI AI', style: TextStyle(fontSize: 8, letterSpacing: 2, color: Colors.grey)),
                         ],
                       ),
                     ],
@@ -94,7 +94,7 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
-                    status.isNotEmpty ? status : 'Our AI engine is analyzing your profile\nfor optimal results.',
+                    status.isNotEmpty ? status : 'Gemini AI is analyzing your profile\nfor optimal personalized results.',
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5),
                   ),
@@ -104,8 +104,8 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
                 
                 // Status Steps
                 _StatusRow(label: 'Analyzing profile metrics', isDone: progress > 0.25),
-                _StatusRow(label: 'AI generating workout plan', isDone: progress > 0.5),
-                _StatusRow(label: 'AI generating diet plan', isDone: progress > 0.7),
+                _StatusRow(label: 'Gemini generating workout plan', isDone: progress > 0.5),
+                _StatusRow(label: 'Gemini generating diet plan', isDone: progress > 0.7),
                 _StatusRow(label: 'Calibrating caloric thresholds', isDone: progress > 0.9),
                 
                 const Spacer(),
@@ -126,7 +126,7 @@ class _GeneratingPlanScreenState extends State<GeneratingPlanScreen> {
                           children: [
                             Icon(Icons.auto_awesome, size: 14, color: Color(0xFFD0BCFF)),
                             SizedBox(width: 6),
-                            Text('POWERED BY AI', style: TextStyle(fontSize: 10, letterSpacing: 2, fontWeight: FontWeight.bold, color: Color(0xFFD0BCFF))),
+                            Text('POWERED BY GEMINI', style: TextStyle(fontSize: 10, letterSpacing: 2, fontWeight: FontWeight.bold, color: Color(0xFFD0BCFF))),
                           ],
                         ),
                       ),

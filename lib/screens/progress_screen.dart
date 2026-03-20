@@ -13,11 +13,10 @@ class ProgressScreen extends StatefulWidget {
 class _ProgressScreenState extends State<ProgressScreen> {
   String _selectedFilter = '1M';
 
-  List<double> _getFilteredPoints(UserProvider provider) {
+  List<Map<String, dynamic>> _getFilteredLogs(UserProvider provider) {
     final logs = provider.weightLogs;
     if (logs.isEmpty) {
-      // Return mock data if no real data exists
-      return _getMockPoints();
+      return [];
     }
 
     final now = DateTime.now();
@@ -47,20 +46,22 @@ class _ProgressScreenState extends State<ProgressScreen> {
       return date != null && date.isAfter(cutoff);
     }).toList();
 
-    if (filtered.isEmpty) return _getMockPoints();
-
-    return filtered.reversed.map<double>((e) => (e['weight'] as num).toDouble()).toList();
+    return filtered.reversed.toList();
   }
 
-  List<double> _getMockPoints() {
-    final mockData = {
-      '1W': [77.2, 77.0, 76.8, 76.9, 76.6, 76.5, 76.4],
-      '1M': [78.5, 78.2, 77.8, 77.5, 77.9, 77.2, 76.8, 76.4],
-      '3M': [82.0, 81.2, 80.5, 79.8, 79.0, 78.5, 77.8, 77.0, 76.4],
-      '1Y': [90.0, 88.5, 86.0, 84.5, 83.0, 81.5, 80.0, 78.5, 77.0, 76.4],
-      'All': [95.0, 92.0, 90.0, 88.0, 86.0, 84.0, 82.0, 80.0, 78.0, 76.4],
-    };
-    return mockData[_selectedFilter] ?? [76.4];
+  List<double> _getPoints(List<Map<String, dynamic>> logs) {
+    if (logs.isEmpty) {
+      // Mock data fallback if completely empty
+      final mockData = {
+        '1W': [77.2, 77.0, 76.8, 76.9, 76.6, 76.5, 76.4],
+        '1M': [78.5, 78.2, 77.8, 77.5, 77.9, 77.2, 76.8, 76.4],
+        '3M': [82.0, 81.2, 80.5, 79.8, 79.0, 78.5, 77.8, 77.0, 76.4],
+        '1Y': [90.0, 88.5, 86.0, 84.5, 83.0, 81.5, 80.0, 78.5, 77.0, 76.4],
+        'All': [95.0, 92.0, 90.0, 88.0, 86.0, 84.0, 82.0, 80.0, 78.0, 76.4],
+      };
+      return mockData[_selectedFilter] ?? [76.4];
+    }
+    return logs.map<double>((e) => (e['weight'] as num).toDouble()).toList();
   }
 
   String _getChangeText(List<double> points) {
@@ -83,23 +84,31 @@ class _ProgressScreenState extends State<ProgressScreen> {
     }
   }
 
-  List<String> _getLabels(List<double> points) {
-    final mockLabels = {
-      '1W': ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
-      '1M': ['W1', 'W1', 'W2', 'W2', 'W3', 'W3', 'W4', 'W4'],
-      '3M': ['M1', 'M1', 'M1', 'M2', 'M2', 'M2', 'M3', 'M3', 'NOW'],
-      '1Y': ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'NOW'],
-      'All': ['START', '', '', '', '', '', '', '', '', 'NOW'],
-    };
-    return mockLabels[_selectedFilter] ?? [];
+  List<String> _getLabels(List<Map<String, dynamic>> logs) {
+    if (logs.isEmpty) {
+      final mockLabels = {
+        '1W': ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+        '1M': ['W1', 'W1', 'W2', 'W2', 'W3', 'W3', 'W4', 'W4'],
+        '3M': ['M1', 'M1', 'M1', 'M2', 'M2', 'M2', 'M3', 'M3', 'NOW'],
+        '1Y': ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'NOW'],
+        'All': ['START', '', '', '', '', '', '', '', '', 'NOW'],
+      };
+      return mockLabels[_selectedFilter] ?? [];
+    }
+
+    return logs.map((log) {
+      final date = DateTime.tryParse(log['date'] ?? '') ?? DateTime.now();
+      return '${date.day}/${date.month}';
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<UserProvider>(context);
-    final points = _getFilteredPoints(provider);
+    final filteredLogs = _getFilteredLogs(provider);
+    final points = _getPoints(filteredLogs);
     final change = _getChangeText(points);
-    final labels = _getLabels(points);
+    final labels = _getLabels(filteredLogs);
     final currentWeight = provider.weightLogs.isNotEmpty
         ? (provider.weightLogs.first['weight'] as num).toDouble()
         : provider.currentWeight;

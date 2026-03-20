@@ -98,6 +98,15 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
                     ],
                   ),
                   
+                  const SizedBox(height: 16),
+                  
+                  // Height Input
+                  _MetricCard(
+                    label: 'Height (CM)',
+                    value: userProvider.height.toStringAsFixed(0),
+                    onChanged: (val) => userProvider.updateMetrics(height: double.tryParse(val)),
+                  ),
+                  
                   const SizedBox(height: 24),
                   
                   // Age Slider
@@ -180,7 +189,7 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
                         value: userProvider.timeline,
                         dropdownColor: AppTheme.surface,
                         isExpanded: true,
-                        items: ['12 Weeks (Optimal Pace)', '8 Weeks (Intensive)', '24 Weeks (Steady)'].map((e) {
+                        items: ['30 Days', '60 Days', '90 Days'].map((e) {
                           return DropdownMenuItem(value: e, child: Text(e, style: const TextStyle(fontSize: 14)));
                         }).toList(),
                         onChanged: (val) => userProvider.updateMetrics(timeline: val),
@@ -227,7 +236,7 @@ class _GoalSetupScreenState extends State<GoalSetupScreen> {
   }
 }
 
-class _MetricCard extends StatelessWidget {
+class _MetricCard extends StatefulWidget {
   final String label;
   final String value;
   final Function(String) onChanged;
@@ -235,11 +244,40 @@ class _MetricCard extends StatelessWidget {
   const _MetricCard({required this.label, required this.value, required this.onChanged});
 
   @override
+  State<_MetricCard> createState() => _MetricCardState();
+}
+
+class _MetricCardState extends State<_MetricCard> {
+  late TextEditingController _controller;
+  bool _isUserEditing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value);
+  }
+
+  @override
+  void didUpdateWidget(covariant _MetricCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Only update text from outside if the user is NOT currently editing
+    if (!_isUserEditing && widget.value != oldWidget.value) {
+      _controller.text = widget.value;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1)),
+        Text(widget.label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1)),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.all(16),
@@ -248,12 +286,33 @@ class _MetricCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
-          child: TextField(
-            controller: TextEditingController(text: value)..selection = TextSelection.fromPosition(TextPosition(offset: value.length)),
-            keyboardType: TextInputType.number,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            decoration: const InputDecoration(border: InputBorder.none, isDense: true),
-            onChanged: onChanged,
+          child: Focus(
+            onFocusChange: (hasFocus) {
+              setState(() => _isUserEditing = hasFocus);
+              // When user leaves the field, if it's empty, reset to 0
+              if (!hasFocus && _controller.text.isEmpty) {
+                _controller.text = '0';
+                widget.onChanged('0');
+              }
+            },
+            child: TextField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                isDense: true,
+                hintText: '0',
+                hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
+              onChanged: (val) {
+                // Allow empty value so user can fully clear and retype
+                if (val.isEmpty) {
+                  return; // Don't call onChanged with empty — wait for user to type new value
+                }
+                widget.onChanged(val);
+              },
+            ),
           ),
         ),
       ],

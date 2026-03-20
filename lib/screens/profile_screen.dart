@@ -117,20 +117,20 @@ class ProfileScreen extends StatelessWidget {
               subtitle: 'Manage your app alerts',
               onTap: () => Navigator.pushNamed(context, '/notifications'),
             ),
-            const SizedBox(height: 8),
-            _SettingsTile(
-              icon: Icons.security,
-              title: 'Privacy & Security',
-              subtitle: 'Data protection settings',
-              onTap: () => Navigator.pushNamed(context, '/privacy-security'),
-            ),
+
             const SizedBox(height: 32),
             _SettingsTile(
               icon: Icons.logout,
               title: 'Logout',
               subtitle: '',
               onTap: () async {
+                // Clear ALL user data (memory + local cache) BEFORE signing out
+                final provider = Provider.of<UserProvider>(context, listen: false);
+                await provider.clearData();
+
+                // Now sign out of Firebase Auth
                 await AuthService.logoutUser();
+
                 if (context.mounted) {
                   Navigator.pushNamedAndRemoveUntil(context, '/auth-gate', (route) => false);
                 }

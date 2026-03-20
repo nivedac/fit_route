@@ -71,20 +71,23 @@ class FitRouteApp extends StatelessWidget {
         // Handle routes that need arguments
         switch (settings.name) {
           case '/workout-detail':
-            final args = settings.arguments as Map<String, String>? ?? {};
+            final args = settings.arguments as Map<String, dynamic>? ?? {};
             return MaterialPageRoute(
               builder: (_) => WorkoutDetailScreen(
                 title: args['title'] ?? 'Core Stability',
                 duration: args['duration'] ?? '15 MINS',
                 difficulty: args['difficulty'] ?? 'INTERMEDIATE',
+                exercises: args['exercises'] ?? const [],
               ),
             );
           case '/meal-detail':
-            final args = settings.arguments as Map<String, String>? ?? {};
+            final args = settings.arguments as Map<String, dynamic>? ?? {};
             return MaterialPageRoute(
               builder: (_) => MealDetailScreen(
                 title: args['title'] ?? 'Protein-Rich Breakfast',
                 calories: args['calories'] ?? '450 kcal',
+                macroData: args['macroData'],
+                ingredientsList: args['ingredientsList'],
               ),
             );
           case '/main':

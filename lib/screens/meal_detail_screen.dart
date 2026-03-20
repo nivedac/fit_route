@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
+import '../providers/user_provider.dart';
 
 class MealDetailScreen extends StatefulWidget {
   final String title;
   final String calories;
+  final Map<String, dynamic>? macroData;
+  final List<dynamic>? ingredientsList;
 
   const MealDetailScreen({
     super.key,
     this.title = 'Protein-Rich Breakfast',
     this.calories = '450 kcal',
+    this.macroData,
+    this.ingredientsList,
   });
 
   @override
@@ -17,22 +23,64 @@ class MealDetailScreen extends StatefulWidget {
 
 class _MealDetailScreenState extends State<MealDetailScreen> {
   bool _isEaten = false;
+  late Map<String, dynamic> _macros;
+  late List<Map<String, dynamic>> _ingredients;
 
-  final Map<String, dynamic> _macros = {
-    'Protein': {'value': '35g', 'percentage': 0.7, 'color': const Color(0xFFD0BCFF)},
-    'Carbs': {'value': '45g', 'percentage': 0.55, 'color': AppTheme.accentCyan},
-    'Fat': {'value': '15g', 'percentage': 0.3, 'color': AppTheme.accentOrange},
-    'Fiber': {'value': '8g', 'percentage': 0.4, 'color': AppTheme.accentEmerald},
-  };
+  @override
+  void initState() {
+    super.initState();
+    
+    // Initialize macros from passed data or use fallback
+    if (widget.macroData != null) {
+      _macros = {
+        'Protein': {'value': '${widget.macroData!['protein']}g', 'percentage': 0.7, 'color': const Color(0xFFD0BCFF)},
+        'Carbs': {'value': '${widget.macroData!['carbs']}g', 'percentage': 0.55, 'color': AppTheme.accentCyan},
+        'Fat': {'value': '${widget.macroData!['fats']}g', 'percentage': 0.3, 'color': AppTheme.accentOrange},
+      };
+    } else {
+      _macros = {
+        'Protein': {'value': '35g', 'percentage': 0.7, 'color': const Color(0xFFD0BCFF)},
+        'Carbs': {'value': '45g', 'percentage': 0.55, 'color': AppTheme.accentCyan},
+        'Fat': {'value': '15g', 'percentage': 0.3, 'color': AppTheme.accentOrange},
+      };
+    }
 
-  final List<Map<String, dynamic>> _ingredients = [
-    {'name': 'Egg Whites', 'quantity': '3 large', 'icon': Icons.egg_rounded, 'cal': '51 kcal'},
-    {'name': 'Greek Yogurt', 'quantity': '1 cup (170g)', 'icon': Icons.icecream_rounded, 'cal': '100 kcal'},
-    {'name': 'Mixed Berries', 'quantity': '100g', 'icon': Icons.spa_rounded, 'cal': '57 kcal'},
-    {'name': 'Rolled Oats', 'quantity': '40g', 'icon': Icons.grass_rounded, 'cal': '154 kcal'},
-    {'name': 'Honey', 'quantity': '1 tbsp', 'icon': Icons.water_drop_rounded, 'cal': '64 kcal'},
-    {'name': 'Chia Seeds', 'quantity': '10g', 'icon': Icons.grain_rounded, 'cal': '49 kcal'},
-  ];
+    // Initialize ingredients from passed data or use fallback
+    if (widget.ingredientsList != null) {
+      _ingredients = widget.ingredientsList!.map((item) {
+        if (item is Map) {
+          return {
+            'name': item['item']?.toString() ?? 'Food Item',
+            'quantity': '${item['grams'] ?? '--'}g',
+            'icon': _getIconForFood(item['item']?.toString() ?? ''),
+            'cal': '${item['calories'] ?? '--'} kcal',
+          };
+        }
+        return {
+          'name': item.toString(),
+          'quantity': '1 portion',
+          'icon': _getIconForFood(item.toString()),
+          'cal': '-- kcal',
+        };
+      }).toList();
+    } else {
+      _ingredients = [
+        {'name': 'Egg Whites', 'quantity': '3 large', 'icon': Icons.egg_rounded, 'cal': '51 kcal'},
+        {'name': 'Greek Yogurt', 'quantity': '1 cup (170g)', 'icon': Icons.icecream_rounded, 'cal': '100 kcal'},
+      ];
+    }
+  }
+
+  IconData _getIconForFood(String name) {
+    final lowerName = name.toLowerCase();
+    if (lowerName.contains('egg')) return Icons.egg_rounded;
+    if (lowerName.contains('chicken') || lowerName.contains('meat') || lowerName.contains('fish')) return Icons.restaurant_menu;
+    if (lowerName.contains('rice') || lowerName.contains('grain') || lowerName.contains('oat')) return Icons.grain_rounded;
+    if (lowerName.contains('berry') || lowerName.contains('fruit') || lowerName.contains('apple')) return Icons.spa_rounded;
+    if (lowerName.contains('yogurt') || lowerName.contains('milk') || lowerName.contains('cheese')) return Icons.icecream_rounded;
+    if (lowerName.contains('water') || lowerName.contains('shake')) return Icons.water_drop_rounded;
+    return Icons.restaurant;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +259,11 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                 onPressed: () {
                   setState(() => _isEaten = !_isEaten);
                   if (_isEaten) {
+                    final provider = Provider.of<UserProvider>(context, listen: false);
+                    final now = DateTime.now();
+                    final dateKey = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+                    provider.updateChecklistItem(dateKey, 'meals', true);
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: const Text('Meal logged! 🎉'),

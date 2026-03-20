@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
+import '../providers/user_provider.dart';
 
 class WorkoutDetailScreen extends StatefulWidget {
   final String title;
   final String duration;
   final String difficulty;
+  final List<dynamic> exercises;
 
   const WorkoutDetailScreen({
     super.key,
     this.title = 'Core Stability',
     this.duration = '15 MINS',
     this.difficulty = 'INTERMEDIATE',
+    this.exercises = const [],
   });
 
   @override
@@ -18,14 +22,39 @@ class WorkoutDetailScreen extends StatefulWidget {
 }
 
 class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
-  final List<Map<String, dynamic>> _exercises = [
-    {'name': 'Plank Hold', 'sets': '3 sets × 45 sec', 'icon': Icons.accessibility_new, 'completed': false},
-    {'name': 'Dead Bug', 'sets': '3 sets × 12 reps', 'icon': Icons.self_improvement, 'completed': false},
-    {'name': 'Bird Dog', 'sets': '3 sets × 10 reps/side', 'icon': Icons.pets, 'completed': false},
-    {'name': 'Mountain Climbers', 'sets': '3 sets × 20 reps', 'icon': Icons.terrain, 'completed': false},
-    {'name': 'Russian Twists', 'sets': '3 sets × 15 reps/side', 'icon': Icons.rotate_left, 'completed': false},
-    {'name': 'Leg Raises', 'sets': '3 sets × 12 reps', 'icon': Icons.straighten, 'completed': false},
-  ];
+  late List<Map<String, dynamic>> _exercises;
+
+  @override
+  void initState() {
+    super.initState();
+    _exercises = widget.exercises.map((e) {
+      final map = Map<String, dynamic>.from(e as Map);
+      return {
+        'name': map['name'] ?? 'Exercise',
+        'sets': '${map['sets']} sets × ${map['reps']} reps',
+        'icon': _getIconForExercise(map['name']?.toString() ?? ''),
+        'completed': false,
+      };
+    }).toList();
+
+    // If empty, use some defaults to avoid crash but ideally AI plan should have them
+    if (_exercises.isEmpty) {
+      _exercises = [
+        {'name': 'Plank Hold', 'sets': '3 sets × 45 sec', 'icon': Icons.accessibility_new, 'completed': false},
+        {'name': 'Dead Bug', 'sets': '3 sets × 12 reps', 'icon': Icons.self_improvement, 'completed': false},
+      ];
+    }
+  }
+
+  IconData _getIconForExercise(String name) {
+    final lowerName = name.toLowerCase();
+    if (lowerName.contains('push')) return Icons.bolt;
+    if (lowerName.contains('pull')) return Icons.fitness_center;
+    if (lowerName.contains('leg') || lowerName.contains('squat')) return Icons.directions_run;
+    if (lowerName.contains('plank') || lowerName.contains('core')) return Icons.accessibility_new;
+    if (lowerName.contains('yoga') || lowerName.contains('stretch')) return Icons.self_improvement;
+    return Icons.fitness_center;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +195,17 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
                   final completed = ex['completed'] as bool;
                   return GestureDetector(
                     onTap: () {
-                      setState(() => _exercises[index]['completed'] = !completed);
+                      setState(() {
+                        _exercises[index]['completed'] = !completed;
+                      });
+                      
+                      // Auto-update tracker if all exercises are done
+                      if (_exercises.every((e) => e['completed'] == true)) {
+                        final provider = Provider.of<UserProvider>(context, listen: false);
+                        final now = DateTime.now();
+                        final dateKey = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+                        provider.updateChecklistItem(dateKey, 'workout', true);
+                      }
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),

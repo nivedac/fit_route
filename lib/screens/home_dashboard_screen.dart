@@ -12,6 +12,22 @@ class HomeDashboardScreen extends StatelessWidget {
     final displayName = userProvider.fullName.isNotEmpty ? userProvider.fullName : 'User';
     final photoUrl = userProvider.profilePhotoUrl;
 
+    final aiPlan = userProvider.aiPlanData;
+    String todayWorkoutName = 'Custom Training';
+    String todayWorkoutDesc = 'Free • 45 mins';
+
+    if (aiPlan != null) {
+      try {
+        final schedule = aiPlan['workout']['weeklySchedule'] as List;
+        final dayObj = schedule.firstWhere((day) => (day['exercises'] as List).isNotEmpty, orElse: () => schedule.first);
+        todayWorkoutName = dayObj['day'] ?? 'Workout Day';
+        final int exerciseCount = (dayObj['exercises'] as List?)?.length ?? 0;
+        todayWorkoutDesc = 'AI Plan • $exerciseCount exercises';
+      } catch (e) {
+        // Fallback handled
+      }
+    }
+
     return Scaffold(
       backgroundColor: AppTheme.charcoal,
       body: SafeArea(
@@ -73,7 +89,7 @@ class HomeDashboardScreen extends StatelessWidget {
                         fit: StackFit.expand,
                         children: [
                           CircularProgressIndicator(
-                            value: 0.75,
+                            value: userProvider.getTodayProgress(),
                             strokeWidth: 8,
                             backgroundColor: Colors.white.withOpacity(0.05),
                             valueColor: const AlwaysStoppedAnimation(AppTheme.sunsetOrange),
@@ -81,9 +97,9 @@ class HomeDashboardScreen extends StatelessWidget {
                           Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text('75%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                Text('GOAL', style: TextStyle(fontSize: 10, color: Colors.white54, letterSpacing: 1)),
+                              children: [
+                                Text('${(userProvider.getTodayProgress() * 100).toInt()}%', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                const Text('GOAL', style: TextStyle(fontSize: 10, color: Colors.white54, letterSpacing: 1)),
                               ],
                             ),
                           ),
@@ -98,15 +114,15 @@ class HomeDashboardScreen extends StatelessWidget {
                         children: [
                           const Text('Daily Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                           const SizedBox(height: 4),
-                          const Text("You've reached 75% of your weekly calorie deficit goal.", style: TextStyle(fontSize: 12, color: Colors.white54)),
+                          Text("You've reached ${(userProvider.getTodayProgress() * 100).toInt()}% of your daily checklist.", style: const TextStyle(fontSize: 12, color: Colors.white54)),
                           const SizedBox(height: 16),
                           Row(
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text('STEPS', style: TextStyle(fontSize: 10, color: Colors.white54)),
-                                  Text('8,432', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                children: [
+                                  const Text('STEPS', style: TextStyle(fontSize: 10, color: Colors.white54)),
+                                  Text(userProvider.getChecklistForDate('${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}')['steps'] == true ? 'Done' : 'Pending', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                               Container(
@@ -117,9 +133,9 @@ class HomeDashboardScreen extends StatelessWidget {
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text('KCAL', style: TextStyle(fontSize: 10, color: Colors.white54)),
-                                  Text('1,850', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                children: [
+                                  const Text('WATER', style: TextStyle(fontSize: 10, color: Colors.white54)),
+                                  Text(userProvider.getChecklistForDate('${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}')['water'] == true ? 'Done' : 'Pending', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                             ],
@@ -167,9 +183,9 @@ class HomeDashboardScreen extends StatelessWidget {
                             const SizedBox(width: 16),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text('Hypertrophy Upper', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                Text('Strength • 45 mins', style: TextStyle(fontSize: 14, color: Colors.white54)),
+                              children: [
+                                Text(todayWorkoutName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                Text(todayWorkoutDesc, style: const TextStyle(fontSize: 14, color: Colors.white54)),
                               ],
                             ),
                           ],
